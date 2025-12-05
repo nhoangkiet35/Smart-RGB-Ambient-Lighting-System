@@ -40,11 +40,11 @@ Toàn bộ quá trình xử lý – từ đọc sensor, chuyển đổi dữ li�
 
 | No  | Name                                           | QTY | Picture                                      |
 | --- | ---------------------------------------------- | --- | -------------------------------------------- |
-| 1   | TUL PYNQ-Z2 Board XILINX ZYNQ XC7Z020 FPGA     | 1   | ![image](../images/board/01_PYNQ-Z2.png)     |
-| 2   | NEOPixel WS2812 5050 RGB 64 LED 5V DC          | 2   | ![image](../images/module/WS2812-64-LED.png) |
-| 3   | GY-30 BH1750VI Light Intensity Sensor          | 1   | ![image](../images/module/BH1750.png)        |
-| 4   | CJMCU-75 LM75 Temperature Sensor -55 → +125 °C | 1   | ![image](../images/module/LM75A.png)         |
-| 5   | MKE-M07 LCD1602 I²C Module                     | 1   | ![image](../images/module/LCD1602_I2C.png)   |
+| 1   | TUL PYNQ-Z2 Board XILINX ZYNQ XC7Z020 FPGA     | 1   | ![image](./image/board/01_PYNQ-Z2.png)     |
+| 2   | NEOPixel WS2812 5050 RGB 64 LED 5V DC          | 2   | ![image](./image/module/WS2812-64-LED.png) |
+| 3   | GY-30 BH1750VI Light Intensity Sensor          | 1   | ![image](./image/module/BH1750.png)        |
+| 4   | CJMCU-75 LM75 Temperature Sensor -55 → +125 °C | 1   | ![image](./image/module/LM75A.png)         |
+| 5   | MKE-M07 LCD1602 I²C Module                     | 1   | ![image](./image/module/LCD1602_I2C.png)   |
 
 ## V. Architecture
 
