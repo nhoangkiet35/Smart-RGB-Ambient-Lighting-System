@@ -1,4 +1,4 @@
-# About Smart RGB Ambient Lighting System
+# 🌈 About Smart RGB Ambient Lighting System
 
 ## I. Introduction
 
@@ -38,8 +38,8 @@ Toàn bộ quá trình xử lý – từ đọc sensor, chuyển đổi dữ li�
 
 ## IV. Product List
 
-| No  | Name                                           | QTY | Picture                                      |
-| --- | ---------------------------------------------- | --- | -------------------------------------------- |
+| No  | Name                                           | QTY | Picture                                    |
+| --- | ---------------------------------------------- | --- | ------------------------------------------ |
 | 1   | TUL PYNQ-Z2 Board XILINX ZYNQ XC7Z020 FPGA     | 1   | ![image](./image/board/01_PYNQ-Z2.png)     |
 | 2   | NEOPixel WS2812 5050 RGB 64 LED 5V DC          | 2   | ![image](./image/module/WS2812-64-LED.png) |
 | 3   | GY-30 BH1750VI Light Intensity Sensor          | 1   | ![image](./image/module/BH1750.png)        |

@@ -1,19 +1,86 @@
-# 🌈 Smart RGB Ambient Lighting System
+# 🌈 **Smart RGB Ambient Lighting System**
 
-Mình viết kiến trúc tổng thể (architecture) cho **Smart RGB Ambient Lighting System** theo kiểu “từ trên xuống”, gắn luôn với các khối RTL bạn đang có nhé.
+### **FPGA-Based Adaptive Lighting Using I2C Sensors + WS2812 LEDs + LCD Display**
+
+---
+
+## 📌 **Giới thiệu**
+
+Smart RGB Ambient Lighting System là một hệ thống ánh sáng thông minh chạy trên FPGA, tự điều chỉnh màu sắc và độ sáng dựa trên môi trường thực tế.
+Hệ thống tích hợp:
+
+* **BH1750** – cảm biến cường độ sáng (Lux)
+* **LM75** – cảm biến nhiệt độ
+* **WS2812** – dải LED RGB địa chỉ hóa
+* **LCD 16x2 (PCF8574 I²C)** – hiển thị thông tin
+* **I²C Master + Arbiter** – cho phép 3 thiết bị I²C hoạt động song song
+* **System Logic** – đưa ra quyết định về ánh sáng và UI
+
+Project được tách thành nhiều module rõ ràng, có tính module hóa cao, dễ dàng mở rộng hoặc thay đổi phần cứng.
+
+---
+
+## 🏗️ **Kiến trúc tổng thể**
+
+```mermaid
+flowchart LR
+    System_Controller --> LCD_Controller
+    Sensors --> I2C_Subsystem --> System_Controller --> Lighting_Controller --> WS2812_LED
+    LCD_Controller --> I2C_Subsystem 
+
+```
+
+Toàn bộ hệ thống tuân theo kiến trúc 4-layer:
+
+### **1) I2C Subsystem**
+
+Gồm:
+
+* `i2c_master`
+* `i2c_arbiter`
+* `bh1750_client`
+* `lm75_client`
+* `lcd_i2c_manager` (gồm `lcd_controller` + `lcd_byte_send`)
+
+Nhiệm vụ:
+
+* Đọc dữ liệu từ BH1750, LM75
+* Gửi lệnh cho LCD qua PCF8574
+* Quản lý chia bus I²C giữa 3 client
+
+### **2) System Controller**
+
+* Nhận dữ liệu sensor (`lux_value`, `temp_value`)
+* Sinh logic điều khiển ánh sáng:
+
+  * `brightness_level` (0–255)
+  * `base_rgb` (24 bit)
+* Tạo nội dung hiển thị LCD:
+
+  * `line1_text`
+  * `line2_text`
+* Gửi yêu cầu cập nhật LCD: `lcd_update_req`
+
+### **3) Lighting Controller**
+
+* Nhận `brightness_level` + `base_rgb`
+* Sinh dữ liệu LED `led_data`
+* Kích hoạt truyền LED `ws_start`
+
+### **4) WS2812 Chain**
+
+* Tạo tín hiệu thời gian chính xác của WS2812
+* Xuất dữ liệu ra dải LED: `ws2812_dout`
+
+---
+
+## 🖼️ **Sơ đồ tổng quan**
 
 ```mermaid
 flowchart TB
 
-    %% ============================
-    %% TOP: External I2C Bus
-    %% ============================
     I2C_BUS[(I2C Bus<br>SDA/SCL)]
 
-
-    %% ============================
-    %% I2C SUBSYSTEM (MÀU XANH DƯƠNG)
-    %% ============================
     subgraph I2C_SUB["I2C Subsystem"]
         direction TB
 
@@ -28,16 +95,8 @@ flowchart TB
         IM(("i2c_master"))
     end
 
-
-    %% ============================
-    %% SYSTEM CONTROLLER (MÀU CAM)
-    %% ============================
     SC(("system_controller"))
 
-
-    %% ============================
-    %% LED ENGINE (MÀU XANH LÁ)
-    %% ============================
     subgraph LEDSYS["LED Engine"]
         direction TB
         LC(("lighting_controller"))
@@ -46,35 +105,22 @@ flowchart TB
 
     LED_OUT[/ws2812_dout/]
 
-
-    %% ============================
-    %% CONNECTIONS
-    %% ============================
-
-    %% I2C data flow
     I2C_BUS --> IM
     IM --> ARB
     ARB --> BH
     ARB --> LM
     ARB --> LCDM
 
-    %% Sensor data to System Controller
     BH -->|lux_value<br>lux_valid| SC
     LM -->|temp_value<br>temp_valid| SC
 
-    %% LCD text update
     SC -->|lcd_update_req<br>line1_text/line2_text| LCDM
     LCDM -->|lcd_update_done| SC
 
-    %% LED control pipeline
     SC -->|brightness_level<br>base_rgb| LC
     LC -->|led_data<br>ws_start| WS
     WS --> LED_OUT
 
-
-    %% ============================
-    %% COLOR STYLES
-    %% ============================
     style I2C_SUB fill:#d0e6ff,stroke:#4a90e2,stroke-width:2px
     style I2C_CLIENTS fill:#e8f2ff,stroke:#4a90e2
     style ARB fill:#bcd9ff,stroke:#4a90e2
@@ -85,333 +131,130 @@ flowchart TB
     style LEDSYS fill:#d5f5d5,stroke:#63c261,stroke-width:2px
     style LC fill:#c1f1c1,stroke:#63c261
     style WS fill:#a8eaa8,stroke:#63c261
-
-    style I2C_BUS fill:#fff,stroke:#4a4a4a,stroke-width:2px
-    style LED_OUT fill:#fff,stroke:#4a4a4a,stroke-width:2px
-  
 ```
 
-🔌 **Luồng chạy chính:**
+---
 
-* Sensor → System Controller → LED Controller → WS2812 → LED Strip
-* System Controller ↔ LCD Manager ↔ I2C Bus
-* Các I2C client độc lập → I2C arbiter → I2C master → Bus
+## 📂 **Cấu trúc thư mục gợi ý**
+
+```
+rtl/
+│
+├── i2c/
+│   ├── i2c_master.v
+│   ├── i2c_arbiter.v
+│   ├── bh1750_client.v
+│   ├── lm75_client.v
+│   └── lcd_i2c_manager.v
+│
+├── lcd/
+│   ├── lcd_controller.v
+│   └── lcd_byte_send.v
+│
+├── led/
+│   ├── lighting_controller.v
+│   └── ws2812_chain.v
+│
+├── system/
+│   └── system_controller.v
+│
+└── top.v
+```
 
 ---
 
-## 1. Mục tiêu hệ thống
+## ⚙️ **Luồng hoạt động chi tiết**
 
-**Smart RGB Ambient Lighting System** là một hệ thống chiếu sáng môi trường dùng dải LED **WS2812** (RGB), điều chỉnh màu sắc/độ sáng **tự động** dựa trên:
+### **1) Sensor → I2C subsystem**
 
-* **Độ sáng môi trường** (cảm biến ánh sáng **BH1750** – I2C).
-* **Nhiệt độ môi trường** (cảm biến nhiệt độ **LM75** – I2C).
+* `bh1750_client` đọc 2 byte lux
+* `lm75_client` đọc 2 byte nhiệt độ
+* `i2c_arbiter` đảm bảo không tranh chấp bus
 
-Đồng thời:
+### **2) I2C subsystem → System Controller**
 
-* **Hiển thị giá trị đo được / trạng thái** lên màn hình **LCD 16x2 qua PCF8574 (I2C)**.
-* Tất cả chạy trên **FPGA**, clock hệ thống **125 MHz** (ví dụ Artix-7 / Cyclone…).
+* Cập nhật `lux_value`, `lux_valid`
+* Cập nhật `temp_value`, `temp_valid`
 
----
+### **3) System Controller → Lighting Controller**
 
-## 2. Kiến trúc mức cao (High-level Architecture)
+Sinh ra:
 
-Có thể hình dung hệ thống thành 4 lớp chính:
+* `brightness_level`: dựa trên độ sáng môi trường
+* `base_rgb`: dựa trên nhiệt độ hoặc logic nghệ thuật
 
-1. **Lớp ngoại vi (Physical/Peripheral Layer)**
+### **4) Lighting Controller → WS2812**
 
-   * Cảm biến BH1750 (I2C)
-   * Cảm biến LM75 (I2C)
-   * LCD 16x2 + PCF8574 (I2C)
-   * Dải LED WS2812
-2. **Lớp giao tiếp bus (I2C & LED Serial Bus)**
+* Tạo pattern LED
+* Xuất `led_data` + `ws_start`
 
-   * **i2c_master** + logic điều khiển truy xuất từng slave (BH1750, LM75, PCF8574)
-   * Chuẩn thời gian bit-stream **WS2812** (T0H/T1H/T0L/T1L, reset)
-3. **Lớp xử lý & điều khiển (Control & Processing Layer)**
+### **5) System Controller → LCD**
 
-   * Các module **bh1750_reader**, **lm75_reader**
-   * Module **color_mapping** / **lighting_controller**: chuyển giá trị lux, °C sang màu/độ sáng LED
-   * FSM điều khiển luồng: đọc sensor → xử lý → cập nhật LED → cập nhật LCD.
-4. **Lớp tích hợp hệ thống (Top-level Integration)**
-
-   * Module **top.v** nối tất cả: clock, reset, i2c_master, sensor reader, LCD controller, ws2812 controller.
+* Tạo nội dung 2 dòng text
+* Gửi yêu cầu update LCD
+* `lcd_i2c_manager` viết text qua PCF8574
 
 ---
 
-## 3. Lớp ngoại vi
+## 🧪 **Testing & Simulation**
 
-### 3.1. Cảm biến ánh sáng BH1750 (I2C)
+Bạn có thể viết testbench riêng cho:
 
-* Địa chỉ I2C 7-bit: **0x23** hoặc **0x5C** (tuỳ module).
-* Được kết nối:
+* `i2c_master_tb.v`
+* `i2c_arbiter_tb.v`
+* `bh1750_client_tb.v`
+* `lm75_client_tb.v`
+* `lcd_controller_tb.v`
+* `lighting_controller_tb.v`
+* `ws2812_chain_tb.v`
+* `top_tb.v`
 
-  * **SCL** ↔ `i2c_scl` (FPGA output open-drain)
-  * **SDA** ↔ `i2c_sda` (FPGA inout open-drain)
-* Được module **bh1750_reader** truy xuất thông qua **i2c_master**:
+Khuyên dùng:
 
-  * Gửi lệnh đo (Continuous H-Resolution Mode)
-  * Đọc dữ liệu 2 byte → tính ra **lux_value** (hoặc giữ raw cho đơn giản).
-
-### 3.2. Cảm biến nhiệt độ LM75 (I2C)
-
-* Địa chỉ 7-bit: **0x48 – 0x4F** (tuỳ chân A0, A1, A2).
-* Cũng dùng chung đường **SCL/SDA** với BH1750 và LCD.
-* Module **lm75_reader**:
-
-  * Gửi read đến register temp
-  * Nhận 2 byte → xuất ra **temp_value** (°C hoặc raw).
-
-### 3.3. LCD 16x2 + PCF8574 (I2C)
-
-* PCF8574 là I/O expander chuyển I2C → bus 4-bit của LCD.
-* Bit mapping (ví dụ thường gặp):
-
-  ```text
-  P7: D7
-  P6: D6
-  P5: D5
-  P4: D4
-  P3: BL (backlight)
-  P2: E
-  P1: RW (0 = write)
-  P0: RS (0 = command, 1 = data)
-  ```
-
-* PCF8574 cũng là một **I2C slave** (thường 0x27 hoặc 0x3F).
-* Module **lcd_controller** (và **lcd_byte_send**) sẽ tạo ra chuỗi byte gửi tới PCF8574 thông qua **i2c_master**, để:
-
-  * Init LCD (4-bit mode, display on, clear, entry mode…)
-  * Ghi text (lux, temp, trạng thái) lên 2 dòng.
-
-### 3.4. Dải LED WS2812
-
-* LED nối nối tiếp: `ws2812_dout` từ FPGA → DIN LED1 → DO1 → DIN2 → …
-* Hệ thống chỉ cần **một chân** digital: `ws2812_dout`.
-* Module RTL:
-
-  * **ws2812_driver**: tạo wave cho **1 LED** (24 bit)
-  * **ws2812_chain**: lặp driver để gửi cho **NUM_LEDS** LED.
+* **ModelSim / QuestaSim**
+* **GTKWave**
+* **Xilinx Vivado / Intel Quartus Waveform Simulation**
 
 ---
 
-## 4. Lớp giao tiếp bus
+## 🧩 **Điểm mạnh của kiến trúc**
 
-### 4.1. I2C Master Core
-
-* Module: **i2c_master.v**
-* Chức năng:
-
-  * Tạo tín hiệu SCL theo tần số **I2C_FREQ_HZ** (ví dụ 100 kHz) từ clock 125 MHz.
-  * Điều khiển SDA open-drain (tri-state), tạo START, STOP, ACK/NACK.
-* Các port chính:
-
-  * `clk`, `rst`
-  * `start`, `rw`, `dev_addr`, `reg_addr` (tuỳ thiết kế), `tx_data`, `rx_data`, `busy`, `ack_error`
-  * `i2c_scl` (output), `i2c_sda` (inout)
-
-### 4.2. I2C Master Controller (Arbiter/Sequencer)
-
-* Module: **i2c_master_controller.v** (hoặc logic FSM trong `top`).
-* Nhiệm vụ:
-
-  * Lập lịch các **transaction I2C** cho từng thiết bị:
-
-    * Bước 1: đọc BH1750
-    * Bước 2: đọc LM75
-    * Bước 3: ghi dữ liệu LCD (PCF8574)
-  * Đảm bảo không có 2 module cùng lúc giật `start` của `i2c_master`.
-* Bạn có thể:
-
-  * Hoặc cho từng module reader (bh1750_reader, lm75_reader, lcd_controller) trực tiếp điều khiển i2c_master qua một **multiplexer**.
-  * Hoặc làm một **FSM trung tâm** gọi tuần tự:
-
-    * state READ_BH1750 → READ_LM75 → UPDATE_LCD → IDLE → lặp.
+* ⭐ **Modular hóa hoàn toàn** → Dễ bảo trì, dễ mở rộng
+* ⭐ **Tương thích nhiều cảm biến khác nhau**
+* ⭐ **I2C arbiter chuẩn công nghiệp**
+* ⭐ **Phân lớp rõ ràng** giữa logic hệ thống, logic hiển thị LED và giao tiếp phần cứng
+* ⭐ **Có thể thay LCD bằng OLED hoặc UART mà không cần thay đổi hệ thống chính**
+* ⭐ **Có thể mở rộng thêm cảm biến (BME280, SHT31…) chỉ bằng cách thêm 1 client**
 
 ---
 
-## 5. Lớp xử lý & điều khiển
+## 📜 **Giấy phép**
 
-### 5.1. Sensor Reader Modules
+Bạn có thể chọn MIT / Apache 2.0 / BSD tuỳ ý.
+Ví dụ:
 
-1. **bh1750_reader.v**
-
-   * FSM nội bộ: `IDLE → START_MEASURE → WAIT → READ_DATA → DONE`.
-   * Giao tiếp với i2c_master qua:
-
-     * `m_start`, `m_rw`, `m_dev_addr`, `m_tx_data`, `m_rx_data`, `m_busy`, `m_ack_error`.
-   * Output:
-
-     * `lux_value` (N-bit, ví dụ 16 bit)
-     * `lux_valid` (1 bit, báo có dữ liệu mới).
-2. **lm75_reader.v**
-
-   * Tương tự, nhưng lệnh và cách đọc data theo protocol LM75.
-   * Output:
-
-     * `temp_value` (N-bit, ví dụ 16 bit hoặc 12 bit sign-extended)
-     * `temp_valid`.
-
-### 5.2. Lighting / Color Mapping Controller
-
-* Module: **color_mapping.v** hoặc **lighting_controller.v**.
-* Input:
-
-  * `lux_value`, `lux_valid`
-  * `temp_value`, `temp_valid`
-  * Có thể thêm tham số cấu hình (ngưỡng sáng, ngưỡng nhiệt độ…)
-* Xử lý:
-
-  * Ví dụ:
-
-    * Nếu môi trường **tối** (lux thấp) → tăng **brightness LED**.
-    * Nếu **nhiệt độ cao** → chuyển màu LED sang **xanh mát**;
-      nhiệt độ thấp → màu **ấm** (cam/đỏ).
-  * Tạo ra bộ **màu sắc cho từng LED** hoặc mẫu màu gradient.
-* Output:
-
-  * `led_data[NUM_LEDS*24-1:0]`
-  * `ws_start` (báo ws2812_chain bắt đầu shift dữ liệu mới)
-  * Có thể thêm: `mode`, `effect` nếu bạn muốn hiệu ứng.
-
-### 5.3. System Control FSM
-
-* Có thể nằm luôn trong **top.v** hoặc module riêng **system_controller.v**.
-* Chu trình hoạt động (ví dụ):
-
-  1. `INIT`: chờ reset xong, khởi tạo LCD.
-  2. `READ_SENSORS`:
-
-     * Gọi `bh1750_reader` → đợi `lux_valid`.
-     * Gọi `lm75_reader` → đợi `temp_valid`.
-  3. `UPDATE_LED`:
-
-     * Đưa `lux_value`, `temp_value` vào `color_mapping`.
-     * Khi `led_data` sẵn sàng → phát `ws_start` cho `ws2812_chain`.
-  4. `UPDATE_LCD`:
-
-     * Format text (ví dụ: “Lux: xxxx”, “Temp: yy.yyC”).
-     * Gửi từng byte ký tự cho `lcd_controller` → i2c_master → PCF8574 → LCD.
-  5. `WAIT_INTERVAL`:
-
-     * Đợi một khoảng thời gian (ví dụ 200 ms, 500 ms) rồi lặp lại `READ_SENSORS`.
+```
+This project is licensed under the MIT License.
+```
 
 ---
 
-## 6. Lớp điều khiển LED WS2812
+## 🤝 **Đóng góp**
 
-### 6.1. ws2812_driver.v (một LED)
-
-* Input:
-
-  * `clk` (125 MHz)
-  * `rst`
-  * `start`
-  * `color[23:0]` (GRB hoặc RGB tuỳ định nghĩa)
-* FSM nội bộ:
-
-  * Duyệt 24 bit, với mỗi bit tạo:
-
-    * `T0H/T0L` nếu bit = 0
-    * `T1H/T1L` nếu bit = 1
-  * Sau 24 bit → “reset time” ≥ 50 µs (tín hiệu low dài).
-* Output:
-
-  * `data_out` (bit tới WS2812)
-  * `done` (xong 1 LED).
-
-### 6.2. ws2812_chain.v (nhiều LED)
-
-* Parameter: `NUM_LEDS`.
-* Input:
-
-  * `clk`, `rst`
-  * `start`
-  * `led_data[NUM_LEDS*24-1:0]` (mảng màu).
-* FSM:
-
-  * Lặp qua từng LED:
-
-    * Lấy `color_i` (24 bit) → đưa vào `ws2812_driver` → chờ `done`.
-  * Sau khi tất cả LED xong → giữ `data_out` low một thời gian reset.
-* Output:
-
-  * `data_out` → `ws2812_dout` (pin đi ra dải LED)
-  * `done` (xong nguyên chuỗi).
+Pull requests được hoan nghênh!
+Bạn có thể mở issue nếu cần hỗ trợ thêm.
 
 ---
 
-## 7. Lớp hiển thị LCD I2C
+## 📧 **Liên hệ**
 
-### 7.1. lcd_controller.v
-
-* Input:
-
-  * `clk`, `rst`
-  * Giao tiếp với **lcd_byte_send** (hoặc trực tiếp với `i2c_master`).
-  * Interface kiểu:
-
-    * `send_cmd`, `send_data`, `lcd_byte`, `busy`, `done`.
-* Chức năng:
-
-  * Chuỗi **init** LCD:
-
-    * Function set, display on, clear, entry mode, home…
-  * Viết text:
-
-    * Quản lý con trỏ DDRAM, dòng 1/2, clear line, v.v.
-* Output:
-
-  * Các tín hiệu điều khiển tới `lcd_byte_send` → `i2c_master` → PCF8574.
-
-### 7.2. lcd_byte_send.v / i2c_master_write.v
-
-* Đảm nhiệm việc:
-
-  * Tách 1 byte LCD (cmd/data) thành **2 nửa nibble (high/low)** theo chuẩn 4-bit.
-  * Với mỗi nibble:
-
-    * Gửi qua PCF8574 kèm RS, E, BL, RW=0.
-    * Tạo xung E high rồi low.
-  * Tất cả thông qua i2c_master (viết 1 byte tới PCF8574 nhiều lần).
+Nếu bạn muốn mình tạo tài liệu PDF, block-diagram chuyên nghiệp, hoặc viết mô tả từng module cho đồ án, chỉ cần yêu cầu.
 
 ---
 
-## 8. Top-level Integration (top.v)
+# 🎉 **Dự án đã hoàn chỉnh kiến trúc — Bạn đã sẵn sàng để implement!**
 
-Cuối cùng, **module top** sẽ:
-
-* **Ports** (ví dụ):
-
-  ```verilog
-  module top (
-      input  wire clk,        // 125 MHz
-      input  wire rst,        // active high / low tuỳ bạn
-
-      inout  wire i2c_sda,
-      output wire i2c_scl,
-
-      output wire ws2812_dout
-  );
-  ```
-
-* Bên trong:
-
-  1. Instantiate **i2c_master** và nối trực tiếp với `i2c_sda`, `i2c_scl`.
-  2. Instantiate:
-
-     * `bh1750_reader`
-     * `lm75_reader`
-     * `lcd_controller` (+ lcd_byte_send nếu tách riêng)
-     * `ws2812_chain` (+ ws2812_driver bên trong)
-     * `lighting_controller` .
-  3. Một FSM trung tâm:
-
-     * Điều phối truy cập i2c_master (multiplex các request).
-     * Điều khiển chu trình: đọc sensors → update LED → update LCD.
-
-Bạn có thể coi **architecture** chính là bức tranh này:
-
-* **Một I2C master** duy nhất → phục vụ **3 slave**: BH1750, LM75, PCF8574/LCD.
-* **Hai sensor** → giá trị đưa vào **khối mapping** → tạo dữ liệu màu cho **dải WS2812**.
-* Đồng thời, các giá trị đó được **format text → LCD** qua cùng bus I2C.
-* Tất cả trái tim điều khiển nằm trong **System Controller FSM** ở `top.v`.
+Bạn muốn mình hỗ trợ bước tiếp theo không?
+👉 Viết FSM BH1750?
+👉 Viết arbiter?
+👉 Viết lighting pattern?
