@@ -1,0 +1,86 @@
+flowchart TB
+
+    %% ============================
+    %% TOP: External I2C Bus
+    %% ============================
+    I2C_BUS[(I2C Bus<br>SDA/SCL)]
+
+
+    %% ============================
+    %% I2C SUBSYSTEM (MÀU XANH DƯƠNG)
+    %% ============================
+    subgraph I2C_SUB["I2C Subsystem"]
+        direction TB
+
+        subgraph I2C_CLIENTS["I2C Clients"]
+            direction LR
+            BH(("bh1750_client"))
+            LM(("lm75_client"))
+            LCDM(("lcd_i2c_manager"))
+        end
+
+        ARB(("i2c_arbiter"))
+        IM(("i2c_master"))
+    end
+
+
+    %% ============================
+    %% SYSTEM CONTROLLER (MÀU CAM)
+    %% ============================
+    SC(("system_controller"))
+
+
+    %% ============================
+    %% LED ENGINE (MÀU XANH LÁ)
+    %% ============================
+    subgraph LEDSYS["LED Engine"]
+        direction TB
+        LC(("lighting_controller"))
+        WS(("ws2812_chain"))
+    end
+
+    LED_OUT[/ws2812_dout/]
+
+
+    %% ============================
+    %% CONNECTIONS
+    %% ============================
+
+    %% I2C data flow
+    I2C_BUS --> IM
+    IM --> ARB
+    ARB --> BH
+    ARB --> LM
+    ARB --> LCDM
+
+    %% Sensor data to System Controller
+    BH -->|lux_value<br>lux_valid| SC
+    LM -->|temp_value<br>temp_valid| SC
+
+    %% LCD text update
+    SC -->|lcd_update_req<br>line1_text/line2_text| LCDM
+    LCDM -->|lcd_update_done| SC
+
+    %% LED control pipeline
+    SC -->|brightness_level<br>base_rgb| LC
+    LC -->|led_data<br>ws_start| WS
+    WS --> LED_OUT
+
+
+    %% ============================
+    %% COLOR STYLES
+    %% ============================
+    style I2C_SUB fill:#d0e6ff,stroke:#4a90e2,stroke-width:2px
+    style I2C_CLIENTS fill:#e8f2ff,stroke:#4a90e2
+    style ARB fill:#bcd9ff,stroke:#4a90e2
+    style IM fill:#a8ccff,stroke:#4a90e2
+
+    style SC fill:#ffe4c7,stroke:#ff9f1c,stroke-width:2px
+
+    style LEDSYS fill:#d5f5d5,stroke:#63c261,stroke-width:2px
+    style LC fill:#c1f1c1,stroke:#63c261
+    style WS fill:#a8eaa8,stroke:#63c261
+
+    style I2C_BUS fill:#fff,stroke:#4a4a4a,stroke-width:2px
+    style LED_OUT fill:#fff,stroke:#4a4a4a,stroke-width:2px
+    
