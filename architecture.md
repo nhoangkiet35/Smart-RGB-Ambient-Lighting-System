@@ -1,6 +1,6 @@
 # 🌈 **Smart RGB Ambient Lighting System**
 
-### **FPGA-Based Adaptive Lighting Using I2C Sensors + WS2812 LEDs + LCD Display**
+**FPGA-Based Adaptive Lighting Using I2C Sensors + WS2812 LEDs + LCD Display**
 
 ---
 
@@ -40,7 +40,7 @@ Gồm:
 * `i2c_arbiter`
 * `bh1750_client`
 * `lm75_client`
-* `lcd_i2c_manager` (gồm `lcd_controller` + `lcd_byte_send`)
+* `lcd_controller`
 
 Nhiệm vụ:
 
@@ -144,8 +144,7 @@ rtl/
 │   ├── i2c_master.v
 │   ├── i2c_arbiter.v
 │   ├── bh1750_client.v
-│   ├── lm75_client.v
-│   └── lcd_i2c_manager.v
+│   └── lm75_client.v
 │
 ├── lcd/
 │   ├── lcd_controller.v
@@ -153,7 +152,8 @@ rtl/
 │
 ├── led/
 │   ├── lighting_controller.v
-│   └── ws2812_chain.v
+│   ├── ws2812_chain.v
+|   └── ws2812_pixel_driver.v
 │
 ├── system/
 │   └── system_controller.v
@@ -173,8 +173,7 @@ rtl/
 
 ### **2) I2C subsystem → System Controller**
 
-* Cập nhật `lux_value`, `lux_valid`
-* Cập nhật `temp_value`, `temp_valid`
+* Cập nhật `lux_value`, `temp_value`
 
 ### **3) System Controller → Lighting Controller**
 
@@ -192,7 +191,7 @@ Sinh ra:
 
 * Tạo nội dung 2 dòng text
 * Gửi yêu cầu update LCD
-* `lcd_i2c_manager` viết text qua PCF8574
+* `lcd_controller` viết text qua PCF8574
 
 ---
 
@@ -249,12 +248,3 @@ Bạn có thể mở issue nếu cần hỗ trợ thêm.
 ## 📧 **Liên hệ**
 
 Nếu bạn muốn mình tạo tài liệu PDF, block-diagram chuyên nghiệp, hoặc viết mô tả từng module cho đồ án, chỉ cần yêu cầu.
-
----
-
-# 🎉 **Dự án đã hoàn chỉnh kiến trúc — Bạn đã sẵn sàng để implement!**
-
-Bạn muốn mình hỗ trợ bước tiếp theo không?
-👉 Viết FSM BH1750?
-👉 Viết arbiter?
-👉 Viết lighting pattern?
