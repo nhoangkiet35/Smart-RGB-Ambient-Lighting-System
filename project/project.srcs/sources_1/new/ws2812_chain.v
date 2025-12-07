@@ -2,7 +2,7 @@ module ws2812_chain #(
     parameter integer NUM_LEDS = 16
 )(
     input  wire                     clk,       // 125 MHz
-    input  wire                     rst_n,
+    input  wire                     rst,
 
     input  wire                     start,     // Bắt đầu gửi cả chuỗi
     input  wire [NUM_LEDS*24-1:0]   led_data,  // Màu của toàn bộ dải
@@ -16,7 +16,7 @@ module ws2812_chain #(
     wire driver_done;
 
     // WS2812 driver
-    ws2812_driver driver (
+    ws2812_pixel_driver driver (
         .clk(clk),
         .rst_n(rst_n),
         .start(driver_start),

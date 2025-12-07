@@ -175,12 +175,12 @@
         ],
         "vertices": {
             "V0": {
-                "VM": "design_1",
+                "VM": "overview_design",
                 "VT": "BC"
             },
             "V1": {
                 "VH": "2",
-                "VM": "design_1",
+                "VM": "overview_design",
                 "VT": "VR"
             },
             "V2": {

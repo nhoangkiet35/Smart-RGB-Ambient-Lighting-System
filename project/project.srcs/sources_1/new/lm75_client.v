@@ -1,10 +1,9 @@
 module lm75_client (
     input  wire       clk,
-    input  wire       rst_n,
+    input  wire       rst,
 
     // Kết quả đưa ra ngoài subsystem
     output wire [15:0] temp_value,   // nhiệt độ (raw hoặc đã scale)
-    output wire        temp_valid,   // 1 pulse khi cập nhật temp_value mới
 
     // Giao diện I2C client tới i2c_arbiter
     output wire        i2c_req,        // yêu cầu dùng I2C

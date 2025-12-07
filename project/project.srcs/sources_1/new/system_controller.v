@@ -1,12 +1,10 @@
 module system_controller (
     input  wire        clk,
-    input  wire        rst_n,
+    input  wire        rst,
 
     // --- Sensor data (từ i2c_subsystem) ---
     input  wire [15:0] lux_value,
-    input  wire        lux_valid,
     input  wire [15:0] temp_value,
-    input  wire        temp_valid,
 
     // --- Điều khiển LCD ---
     output wire        lcd_update_req,

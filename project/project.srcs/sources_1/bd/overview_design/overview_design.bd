@@ -1,0 +1,717 @@
+{
+  "design": {
+    "design_info": {
+      "boundary_crc": "0x960A817B960A817B",
+      "device": "xc7z020clg400-1",
+      "gen_directory": "../../../../project.gen/sources_1/bd/overview_design",
+      "name": "overview_design",
+      "rev_ctrl_bd_flag": "RevCtrlBdOff",
+      "synth_flow_mode": "Hierarchical",
+      "tool_version": "2025.1"
+    },
+    "design_tree": {
+      "bh1750_client_0": "",
+      "i2c_arbiter_0": "",
+      "lm75_client_0": "",
+      "lcd_controller_0": "",
+      "i2c_master_0": "",
+      "lighting_controller_0": "",
+      "ws2812_chain_0": "",
+      "system_controller_0": ""
+    },
+    "ports": {
+      "i2c_scl_0": {
+        "direction": "O"
+      },
+      "i2c_sda_0": {
+        "direction": "IO"
+      },
+      "data_out_0": {
+        "direction": "O"
+      }
+    },
+    "components": {
+      "bh1750_client_0": {
+        "vlnv": "xilinx.com:module_ref:bh1750_client:1.0",
+        "ip_revision": "1",
+        "xci_name": "overview_design_bh1750_client_0_0",
+        "xci_path": "ip\\overview_design_bh1750_client_0_0\\overview_design_bh1750_client_0_0.xci",
+        "inst_hier_path": "bh1750_client_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "bh1750_client",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "ASSOCIATED_RESET": {
+                "value": "rst",
+                "value_src": "constant"
+              }
+            }
+          },
+          "rst": {
+            "type": "rst",
+            "direction": "I"
+          },
+          "lux_value": {
+            "direction": "O",
+            "left": "15",
+            "right": "0"
+          },
+          "i2c_req": {
+            "direction": "O"
+          },
+          "i2c_rw": {
+            "direction": "O"
+          },
+          "i2c_dev_addr": {
+            "direction": "O",
+            "left": "6",
+            "right": "0"
+          },
+          "i2c_tx_data": {
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "i2c_rx_data": {
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "i2c_busy": {
+            "direction": "I"
+          },
+          "i2c_done": {
+            "direction": "I"
+          },
+          "i2c_ack_error": {
+            "direction": "I"
+          }
+        }
+      },
+      "i2c_arbiter_0": {
+        "vlnv": "xilinx.com:module_ref:i2c_arbiter:1.0",
+        "ip_revision": "1",
+        "xci_name": "overview_design_i2c_arbiter_0_0",
+        "xci_path": "ip\\overview_design_i2c_arbiter_0_0\\overview_design_i2c_arbiter_0_0.xci",
+        "inst_hier_path": "i2c_arbiter_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "i2c_arbiter",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "ASSOCIATED_RESET": {
+                "value": "rst",
+                "value_src": "constant"
+              }
+            }
+          },
+          "rst": {
+            "type": "rst",
+            "direction": "I"
+          },
+          "c0_req": {
+            "direction": "I"
+          },
+          "c0_rw": {
+            "direction": "I"
+          },
+          "c0_dev_addr": {
+            "direction": "I",
+            "left": "6",
+            "right": "0"
+          },
+          "c0_rx_data": {
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "c1_req": {
+            "direction": "I"
+          },
+          "c1_rw": {
+            "direction": "I"
+          },
+          "c1_dev_addr": {
+            "direction": "I",
+            "left": "6",
+            "right": "0"
+          },
+          "c1_rx_data": {
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "c2_req": {
+            "direction": "I"
+          },
+          "c2_rw": {
+            "direction": "I"
+          },
+          "c2_dev_addr": {
+            "direction": "I",
+            "left": "6",
+            "right": "0"
+          },
+          "c2_rx_data": {
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "req": {
+            "direction": "O"
+          },
+          "rw": {
+            "direction": "O"
+          },
+          "dev_addr": {
+            "direction": "O",
+            "left": "6",
+            "right": "0"
+          },
+          "tx_data": {
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          }
+        }
+      },
+      "lm75_client_0": {
+        "vlnv": "xilinx.com:module_ref:lm75_client:1.0",
+        "ip_revision": "1",
+        "xci_name": "overview_design_lm75_client_0_0",
+        "xci_path": "ip\\overview_design_lm75_client_0_0\\overview_design_lm75_client_0_0.xci",
+        "inst_hier_path": "lm75_client_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "lm75_client",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "ASSOCIATED_RESET": {
+                "value": "rst",
+                "value_src": "constant"
+              }
+            }
+          },
+          "rst": {
+            "type": "rst",
+            "direction": "I"
+          },
+          "temp_value": {
+            "direction": "O",
+            "left": "15",
+            "right": "0"
+          },
+          "i2c_req": {
+            "direction": "O"
+          },
+          "i2c_rw": {
+            "direction": "O"
+          },
+          "i2c_dev_addr": {
+            "direction": "O",
+            "left": "6",
+            "right": "0"
+          },
+          "i2c_tx_data": {
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "i2c_rx_data": {
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "i2c_busy": {
+            "direction": "I"
+          },
+          "i2c_done": {
+            "direction": "I"
+          },
+          "i2c_ack_error": {
+            "direction": "I"
+          }
+        }
+      },
+      "lcd_controller_0": {
+        "vlnv": "xilinx.com:module_ref:lcd_controller:1.0",
+        "ip_revision": "1",
+        "xci_name": "overview_design_lcd_controller_0_0",
+        "xci_path": "ip\\overview_design_lcd_controller_0_0\\overview_design_lcd_controller_0_0.xci",
+        "inst_hier_path": "lcd_controller_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "lcd_controller",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "ASSOCIATED_RESET": {
+                "value": "rst",
+                "value_src": "constant"
+              }
+            }
+          },
+          "rst": {
+            "type": "rst",
+            "direction": "I"
+          },
+          "update_req": {
+            "direction": "I"
+          },
+          "update_done": {
+            "direction": "O"
+          },
+          "line1_text": {
+            "direction": "I",
+            "left": "127",
+            "right": "0"
+          },
+          "line2_text": {
+            "direction": "I",
+            "left": "127",
+            "right": "0"
+          },
+          "i2c_req": {
+            "direction": "O"
+          },
+          "i2c_rw": {
+            "direction": "O"
+          },
+          "i2c_dev_addr": {
+            "direction": "O",
+            "left": "6",
+            "right": "0"
+          },
+          "i2c_tx_data": {
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "lbyte_start": {
+            "direction": "O"
+          },
+          "lbyte_data": {
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "lbyte_rs": {
+            "direction": "O"
+          },
+          "lbyte_busy": {
+            "direction": "I"
+          },
+          "lbyte_done": {
+            "direction": "I"
+          }
+        }
+      },
+      "i2c_master_0": {
+        "vlnv": "xilinx.com:module_ref:i2c_master:1.0",
+        "ip_revision": "1",
+        "xci_name": "overview_design_i2c_master_0_0",
+        "xci_path": "ip\\overview_design_i2c_master_0_0\\overview_design_i2c_master_0_0.xci",
+        "inst_hier_path": "i2c_master_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "i2c_master",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "ASSOCIATED_RESET": {
+                "value": "rst",
+                "value_src": "constant"
+              }
+            }
+          },
+          "rst": {
+            "type": "rst",
+            "direction": "I"
+          },
+          "req": {
+            "direction": "I"
+          },
+          "rw": {
+            "direction": "I"
+          },
+          "dev_addr": {
+            "direction": "I",
+            "left": "6",
+            "right": "0"
+          },
+          "rx_data": {
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "i2c_sda": {
+            "direction": "IO"
+          },
+          "i2c_scl": {
+            "direction": "O"
+          }
+        }
+      },
+      "lighting_controller_0": {
+        "vlnv": "xilinx.com:module_ref:lighting_controller:1.0",
+        "ip_revision": "1",
+        "xci_name": "overview_design_lighting_controller_0_0",
+        "xci_path": "ip\\overview_design_lighting_controller_0_0\\overview_design_lighting_controller_0_0.xci",
+        "inst_hier_path": "lighting_controller_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "lighting_controller",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "ASSOCIATED_RESET": {
+                "value": "rst",
+                "value_src": "constant"
+              }
+            }
+          },
+          "rst": {
+            "type": "rst",
+            "direction": "I"
+          },
+          "brightness_level": {
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "base_rgb": {
+            "direction": "I",
+            "left": "23",
+            "right": "0"
+          },
+          "ws_start": {
+            "direction": "O"
+          },
+          "led_data": {
+            "direction": "O",
+            "left": "383",
+            "right": "0"
+          }
+        }
+      },
+      "ws2812_chain_0": {
+        "vlnv": "xilinx.com:module_ref:ws2812_chain:1.0",
+        "ip_revision": "1",
+        "xci_name": "overview_design_ws2812_chain_0_0",
+        "xci_path": "ip\\overview_design_ws2812_chain_0_0\\overview_design_ws2812_chain_0_0.xci",
+        "inst_hier_path": "ws2812_chain_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "ws2812_chain",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "ASSOCIATED_RESET": {
+                "value": "rst",
+                "value_src": "constant"
+              }
+            }
+          },
+          "rst": {
+            "type": "rst",
+            "direction": "I"
+          },
+          "start": {
+            "direction": "I"
+          },
+          "led_data": {
+            "direction": "I",
+            "left": "383",
+            "right": "0"
+          },
+          "data_out": {
+            "direction": "O"
+          },
+          "done": {
+            "direction": "O"
+          }
+        }
+      },
+      "system_controller_0": {
+        "vlnv": "xilinx.com:module_ref:system_controller:1.0",
+        "ip_revision": "1",
+        "xci_name": "overview_design_system_controller_0_0",
+        "xci_path": "ip\\overview_design_system_controller_0_0\\overview_design_system_controller_0_0.xci",
+        "inst_hier_path": "system_controller_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "system_controller",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "ASSOCIATED_RESET": {
+                "value": "rst",
+                "value_src": "constant"
+              }
+            }
+          },
+          "rst": {
+            "type": "rst",
+            "direction": "I"
+          },
+          "lux_value": {
+            "direction": "I",
+            "left": "15",
+            "right": "0"
+          },
+          "temp_value": {
+            "direction": "I",
+            "left": "15",
+            "right": "0"
+          },
+          "lcd_update_req": {
+            "direction": "O"
+          },
+          "lcd_update_done": {
+            "direction": "I"
+          },
+          "line1_text": {
+            "direction": "O",
+            "left": "127",
+            "right": "0"
+          },
+          "line2_text": {
+            "direction": "O",
+            "left": "127",
+            "right": "0"
+          },
+          "brightness_level": {
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "base_rgb": {
+            "direction": "O",
+            "left": "23",
+            "right": "0"
+          }
+        }
+      }
+    },
+    "nets": {
+      "Net": {
+        "ports": [
+          "i2c_sda_0",
+          "i2c_master_0/i2c_sda"
+        ]
+      },
+      "bh1750_client_0_i2c_dev_addr": {
+        "ports": [
+          "bh1750_client_0/i2c_dev_addr",
+          "i2c_arbiter_0/c0_dev_addr"
+        ]
+      },
+      "bh1750_client_0_i2c_req": {
+        "ports": [
+          "bh1750_client_0/i2c_req",
+          "i2c_arbiter_0/c0_req"
+        ]
+      },
+      "bh1750_client_0_i2c_rw": {
+        "ports": [
+          "bh1750_client_0/i2c_rw",
+          "i2c_arbiter_0/c0_rw"
+        ]
+      },
+      "bh1750_client_0_i2c_tx_data": {
+        "ports": [
+          "bh1750_client_0/i2c_tx_data",
+          "i2c_arbiter_0/c0_rx_data"
+        ]
+      },
+      "bh1750_client_0_lux_value": {
+        "ports": [
+          "bh1750_client_0/lux_value",
+          "system_controller_0/lux_value"
+        ]
+      },
+      "i2c_arbiter_0_dev_addr": {
+        "ports": [
+          "i2c_arbiter_0/dev_addr",
+          "i2c_master_0/dev_addr"
+        ]
+      },
+      "i2c_arbiter_0_req": {
+        "ports": [
+          "i2c_arbiter_0/req",
+          "i2c_master_0/req"
+        ]
+      },
+      "i2c_arbiter_0_rw": {
+        "ports": [
+          "i2c_arbiter_0/rw",
+          "i2c_master_0/rw"
+        ]
+      },
+      "i2c_arbiter_0_tx_data": {
+        "ports": [
+          "i2c_arbiter_0/tx_data",
+          "i2c_master_0/rx_data"
+        ]
+      },
+      "i2c_master_0_i2c_scl": {
+        "ports": [
+          "i2c_master_0/i2c_scl",
+          "i2c_scl_0"
+        ]
+      },
+      "lcd_controller_0_i2c_dev_addr": {
+        "ports": [
+          "lcd_controller_0/i2c_dev_addr",
+          "i2c_arbiter_0/c2_dev_addr"
+        ]
+      },
+      "lcd_controller_0_i2c_req": {
+        "ports": [
+          "lcd_controller_0/i2c_req",
+          "i2c_arbiter_0/c2_req"
+        ]
+      },
+      "lcd_controller_0_i2c_rw": {
+        "ports": [
+          "lcd_controller_0/i2c_rw",
+          "i2c_arbiter_0/c2_rw"
+        ]
+      },
+      "lcd_controller_0_i2c_tx_data": {
+        "ports": [
+          "lcd_controller_0/i2c_tx_data",
+          "i2c_arbiter_0/c2_rx_data"
+        ]
+      },
+      "lcd_controller_0_update_done": {
+        "ports": [
+          "lcd_controller_0/update_done",
+          "system_controller_0/lcd_update_done"
+        ]
+      },
+      "lighting_controller_0_led_data": {
+        "ports": [
+          "lighting_controller_0/led_data",
+          "ws2812_chain_0/led_data"
+        ]
+      },
+      "lighting_controller_0_ws_start": {
+        "ports": [
+          "lighting_controller_0/ws_start",
+          "ws2812_chain_0/start"
+        ]
+      },
+      "lm75_client_0_i2c_dev_addr": {
+        "ports": [
+          "lm75_client_0/i2c_dev_addr",
+          "i2c_arbiter_0/c1_dev_addr"
+        ]
+      },
+      "lm75_client_0_i2c_req": {
+        "ports": [
+          "lm75_client_0/i2c_req",
+          "i2c_arbiter_0/c1_req"
+        ]
+      },
+      "lm75_client_0_i2c_rw": {
+        "ports": [
+          "lm75_client_0/i2c_rw",
+          "i2c_arbiter_0/c1_rw"
+        ]
+      },
+      "lm75_client_0_i2c_tx_data": {
+        "ports": [
+          "lm75_client_0/i2c_tx_data",
+          "i2c_arbiter_0/c1_rx_data"
+        ]
+      },
+      "lm75_client_0_temp_value": {
+        "ports": [
+          "lm75_client_0/temp_value",
+          "system_controller_0/temp_value"
+        ]
+      },
+      "system_controller_0_base_rgb": {
+        "ports": [
+          "system_controller_0/base_rgb",
+          "lighting_controller_0/base_rgb"
+        ]
+      },
+      "system_controller_0_brightness_level": {
+        "ports": [
+          "system_controller_0/brightness_level",
+          "lighting_controller_0/brightness_level"
+        ]
+      },
+      "system_controller_0_lcd_update_req": {
+        "ports": [
+          "system_controller_0/lcd_update_req",
+          "lcd_controller_0/update_req"
+        ]
+      },
+      "system_controller_0_line1_text": {
+        "ports": [
+          "system_controller_0/line1_text",
+          "lcd_controller_0/line1_text"
+        ]
+      },
+      "system_controller_0_line2_text": {
+        "ports": [
+          "system_controller_0/line2_text",
+          "lcd_controller_0/line2_text"
+        ]
+      },
+      "ws2812_chain_0_data_out": {
+        "ports": [
+          "ws2812_chain_0/data_out",
+          "data_out_0"
+        ]
+      }
+    }
+  }
+}

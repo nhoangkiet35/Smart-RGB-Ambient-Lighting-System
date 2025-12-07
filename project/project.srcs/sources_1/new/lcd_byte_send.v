@@ -1,6 +1,6 @@
 module lcd_byte_send (
     input  wire       clk,
-    input  wire       rst_n,
+    input  wire       rst,
 
     // Điều khiển phía trên
     input  wire       start,       // Bắt đầu gửi 1 byte
