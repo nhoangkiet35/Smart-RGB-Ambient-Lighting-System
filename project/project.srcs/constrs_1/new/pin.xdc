@@ -8,3 +8,6 @@ set_property PACKAGE_PIN Y16 [get_ports i2c_scl]
 set_property PACKAGE_PIN Y17 [get_ports i2c_sda]
 set_property PACKAGE_PIN D19 [get_ports rst_n]
 set_property PACKAGE_PIN T10 [get_ports ws2812_dout]
+
+set_property PACKAGE_PIN D19 [get_ports rst]
+set_property IOSTANDARD LVCMOS33 [get_ports rst]

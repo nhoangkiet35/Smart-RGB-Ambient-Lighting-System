@@ -48,7 +48,9 @@ Toàn bộ quá trình xử lý – từ đọc sensor, chuyển đổi dữ li�
 
 ## V. Architecture
 
-Hệ thống thiết kế theo hướng **module hóa** và **xử lý song song**, sử dụng mô hình **Sensor → Processing → Effect → Driver → Output**. Mỗi thành phần đảm nhiệm một nhiệm vụ độc lập, sau đó kết nối với nhau thông qua các bus tín hiệu rõ ràng và chuẩn hóa. Kiến trúc tổng quan gồm 5 khối chính:
+Hệ thống thiết kế theo hướng **module hóa** và **xử lý song song**, sử dụng mô hình **Sensor → Processing → Effect → Driver → Output**. Mỗi thành phần đảm nhiệm một nhiệm vụ độc lập, sau đó kết nối với nhau thông qua các bus tín hiệu rõ ràng và chuẩn hóa. Kiến trúc tổng quan gồm 4 khối chính:
+
+![1765279510871](image/README/1765279510871.png)
 
 ### 1. Sensor Interface Layer (I²C Layer)
 
@@ -59,69 +61,48 @@ Tầng này bao gồm các module đọc cảm biến chạy trên bus I²C:
 
 Cả hai module đều dùng chung **I²C Master** tùy chỉnh, hỗ trợ truyền–nhận 8-bit, acknowledge, stop/start condition theo chuẩn 100 kHz.
 
-| _Figure 1: I²C Master Module_                                                | _Figure 2: BH1750 Reader Module_                                             | _Figure 3: LM75 Reader Module_                                               |
-| ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| ![1763804474354](image/AboutSmartRGBAmbientLightingSystem/1763804474354.png) | ![1763804492457](image/AboutSmartRGBAmbientLightingSystem/1763804492457.png) | ![1763804515425](image/AboutSmartRGBAmbientLightingSystem/1763804515425.png) |
+| _Figure 1: I²C Master Module_                    | _Figure 2: BH1750 Reader Module_                 | _Figure 3: LM75 Reader Module_                   |
+| ------------------------------------------------ | ------------------------------------------------ | ------------------------------------------------ |
+| ![1765279541978](image/README/1765279541978.png) | ![1765279561557](image/README/1765279561557.png) | ![1765279575306](image/README/1765279575306.png) |
 
 ### 2. Data Processing Layer
 
 Sau khi dữ liệu được lấy từ cảm biến, tầng xử lý sẽ đảm nhiệm việc:
 
 * Chuyển đổi dữ liệu raw thành giá trị usable.
-* **Brightness Controller** : map lux → mức sáng (0–15).
-* **Temperature Effect Controller** : map nhiệt độ → màu RGB tương ứng (cool/warm).
+* **System Controller** :
+  * map lux → mức sáng (0–15).
+  * map nhiệt độ → màu RGB tương ứng (cool/warm).
 
-| _Figure 4: Brightness Controller Module_                                     | _Figure 5: Temperature Effect Controller_                                    |
-| ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| ![1763804546555](image/AboutSmartRGBAmbientLightingSystem/1763804546555.png) | ![1763804563554](image/AboutSmartRGBAmbientLightingSystem/1763804563554.png) |
+| _Figure 4: System Controller Module_             |
+| ------------------------------------------------ |
+| ![1765279647788](image/README/1765279647788.png) |
 
 > Tầng này là “não” của hệ thống, quyết định logic biểu hiện ánh sáng.
 
 ### 3. RGB Effect Engine
 
-Đây là khối tạo hiệu ứng RGB chạy song song:
-
-* Ambient Mode
-* Rainbow Fade
-* Wave Mode
-* Static Color
+Đây là khối tạo hiệu ứng RGB chạy song song: **Wave Mode**
 
 Khối này nhận input từ tầng xử lý (độ sáng, màu cơ bản, nhiệt độ) và trộn vào hiệu ứng đang chạy → tạo ra **mảng 64 giá trị RGB** cho dải LED WS2812.
 
-_Figure 6: RGB Effect Engine_
-![1763804586802](image/AboutSmartRGBAmbientLightingSystem/1763804586802.png)
+| _Figure 5: RGB Lighting Controller_              |
+| ------------------------------------------------ |
+| ![1765279749366](image/README/1765279749366.png) |
 
-### 4. WS2812 Layer
-
-Module quan trọng nhất để giao tiếp LED, sinh ra chuẩn timing **800 kHz** cho WS2812, gồm:
+Module WS2812 quan trọng nhất để giao tiếp LED, sinh ra chuẩn timing **800 kHz** cho WS2812, gồm:
 
 * Tạo các bitstream 24-bit cho từng LED
 * Sinh waveform chính xác từng nanosecond (T0H, T0L, T1H, T1L)
 * Gửi tuần tự 64 LED theo pipeline
 
-| _Figure 7.1: WS2812 Chain Module_                                                | _Figure 7.2: WS2812 Driver Module_                                               |
-| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| ![1763804639061-A](image/AboutSmartRGBAmbientLightingSystem/1763804639061-A.png) | ![1763804639061-B](image/AboutSmartRGBAmbientLightingSystem/1763804639061-B.png) |
+### 4. Display & UI Layer
 
-### 5. Display & UI Layer
+**LCD1602 Text** hiển thị trạng thái hệ thống, brightness hiện tại và cảnh báo khi nhiệt độ vượt ngưỡng.
 
-* **LCD1602 Text Scroller** hiển thị trạng thái hệ thống, brightness hiện tại và cảnh báo khi nhiệt độ vượt ngưỡng.
-* Text scrolling được làm bằng frame buffer nhỏ để mô phỏng chuyển động mượt.
-
-_Figure 8: LCD 1602 Display Module_
-![1763804699271](image/AboutSmartRGBAmbientLightingSystem/1763804699271.png)
-
-### Top-Level Integration
-
-Tất cả module được đóng gói trong  **top.v** , nơi:
-
-* Clock được chia và xử lý
-* Reset logic quản lý trạng thái hệ thống
-* Các module được nối với nhau theo kiến trúc pipeline
-* Sensor → Processing → Effect → Driver chạy song song
-
-_Figure 9: Top-Level Integration Module_
-![1763804712439](image/AboutSmartRGBAmbientLightingSystem/1763804712439.png)
+| _Figure 6: LCD 1602 I2C Module_                  |
+| ------------------------------------------------ |
+| ![1765279896476](image/README/1765279896476.png) |
 
 ## VI. Block Diagram / Data Flow
 

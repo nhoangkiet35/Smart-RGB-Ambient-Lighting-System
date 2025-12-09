@@ -14,13 +14,6 @@ module lcd_controller (
     output wire       i2c_req,        // yêu cầu 1 transaction (tương ứng i2c_start)
     output wire       i2c_rw,         // 0 = write (LCD chỉ ghi)
     output wire [6:0] i2c_dev_addr,   // địa chỉ PCF8574 (0x27/0x3F)
-    output wire [7:0] i2c_tx_data,    // byte xuất lên I2C
-
-    // Giao tiếp xuống lcd_byte_send
-    output wire       lbyte_start,
-    output wire [7:0] lbyte_data,
-    output wire       lbyte_rs,        // 0=cmd, 1=data
-    input  wire       lbyte_busy,
-    input  wire       lbyte_done
+    output wire [7:0] i2c_tx_data     // byte xuất lên I2C
 );
 endmodule

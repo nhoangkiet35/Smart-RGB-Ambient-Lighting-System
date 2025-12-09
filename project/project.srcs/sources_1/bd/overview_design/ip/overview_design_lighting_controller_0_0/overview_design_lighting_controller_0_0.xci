@@ -8,11 +8,11 @@
     "gen_directory": "../../../../../../project.gen/sources_1/bd/overview_design/ip/overview_design_lighting_controller_0_0",
     "parameters": {
       "component_parameters": {
-        "NUM_LEDS": [ { "value": "16", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "NUM_LEDS": [ { "value": "64", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "Component_Name": [ { "value": "overview_design_lighting_controller_0_0", "resolve_type": "user", "usage": "all" } ]
       },
       "model_parameters": {
-        "NUM_LEDS": [ { "value": "16", "resolve_type": "generated", "format": "long", "usage": "all" } ]
+        "NUM_LEDS": [ { "value": "64", "resolve_type": "generated", "format": "long", "usage": "all" } ]
       },
       "project_parameters": {
         "ARCHITECTURE": [ { "value": "zynq" } ],
@@ -44,8 +44,7 @@
         "rst": [ { "direction": "in" } ],
         "brightness_level": [ { "direction": "in", "size_left": "7", "size_right": "0" } ],
         "base_rgb": [ { "direction": "in", "size_left": "23", "size_right": "0" } ],
-        "ws_start": [ { "direction": "out" } ],
-        "led_data": [ { "direction": "out", "size_left": "383", "size_right": "0" } ]
+        "data_out": [ { "direction": "out" } ]
       },
       "interfaces": {
         "rst": {

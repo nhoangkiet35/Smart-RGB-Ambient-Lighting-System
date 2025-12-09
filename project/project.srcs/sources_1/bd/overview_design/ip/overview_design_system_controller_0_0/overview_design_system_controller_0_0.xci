@@ -8,7 +8,15 @@
     "gen_directory": "../../../../../../project.gen/sources_1/bd/overview_design/ip/overview_design_system_controller_0_0",
     "parameters": {
       "component_parameters": {
+        "IDLE": [ { "value": "\"00\"", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
+        "SENT_REQ": [ { "value": "\"01\"", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
+        "WAIT_DONE": [ { "value": "\"10\"", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
         "Component_Name": [ { "value": "overview_design_system_controller_0_0", "resolve_type": "user", "usage": "all" } ]
+      },
+      "model_parameters": {
+        "IDLE": [ { "value": "\"00\"", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
+        "SENT_REQ": [ { "value": "\"01\"", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
+        "WAIT_DONE": [ { "value": "\"10\"", "resolve_type": "generated", "format": "bitString", "usage": "all" } ]
       },
       "project_parameters": {
         "ARCHITECTURE": [ { "value": "zynq" } ],
@@ -40,8 +48,8 @@
         "rst": [ { "direction": "in" } ],
         "lux_value": [ { "direction": "in", "size_left": "15", "size_right": "0" } ],
         "temp_value": [ { "direction": "in", "size_left": "15", "size_right": "0" } ],
-        "lcd_update_req": [ { "direction": "out" } ],
         "lcd_update_done": [ { "direction": "in" } ],
+        "lcd_update_req": [ { "direction": "out" } ],
         "line1_text": [ { "direction": "out", "size_left": "127", "size_right": "0" } ],
         "line2_text": [ { "direction": "out", "size_left": "127", "size_right": "0" } ],
         "brightness_level": [ { "direction": "out", "size_left": "7", "size_right": "0" } ],

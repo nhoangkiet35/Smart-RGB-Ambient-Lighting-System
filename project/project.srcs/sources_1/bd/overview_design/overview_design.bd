@@ -16,7 +16,6 @@
       "lcd_controller_0": "",
       "i2c_master_0": "",
       "lighting_controller_0": "",
-      "ws2812_chain_0": "",
       "system_controller_0": ""
     },
     "ports": {
@@ -357,10 +356,10 @@
             "type": "rst",
             "direction": "I"
           },
-          "req": {
+          "start": {
             "direction": "I"
           },
-          "rw": {
+          "req": {
             "direction": "I"
           },
           "dev_addr": {
@@ -368,15 +367,32 @@
             "left": "6",
             "right": "0"
           },
-          "rx_data": {
-            "direction": "I",
-            "left": "7",
-            "right": "0"
+          "rw": {
+            "direction": "I"
           },
           "i2c_sda": {
             "direction": "IO"
           },
           "i2c_scl": {
+            "direction": "IO"
+          },
+          "rx_data": {
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "tx_data": {
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "busy": {
+            "direction": "O"
+          },
+          "ack_err": {
+            "direction": "O"
+          },
+          "done": {
             "direction": "O"
           }
         }
@@ -418,55 +434,7 @@
             "left": "23",
             "right": "0"
           },
-          "ws_start": {
-            "direction": "O"
-          },
-          "led_data": {
-            "direction": "O",
-            "left": "383",
-            "right": "0"
-          }
-        }
-      },
-      "ws2812_chain_0": {
-        "vlnv": "xilinx.com:module_ref:ws2812_chain:1.0",
-        "ip_revision": "1",
-        "xci_name": "overview_design_ws2812_chain_0_0",
-        "xci_path": "ip\\overview_design_ws2812_chain_0_0\\overview_design_ws2812_chain_0_0.xci",
-        "inst_hier_path": "ws2812_chain_0",
-        "has_run_ip_tcl": "true",
-        "reference_info": {
-          "ref_type": "hdl",
-          "ref_name": "ws2812_chain",
-          "boundary_crc": "0x0"
-        },
-        "ports": {
-          "clk": {
-            "type": "clk",
-            "direction": "I",
-            "parameters": {
-              "ASSOCIATED_RESET": {
-                "value": "rst",
-                "value_src": "constant"
-              }
-            }
-          },
-          "rst": {
-            "type": "rst",
-            "direction": "I"
-          },
-          "start": {
-            "direction": "I"
-          },
-          "led_data": {
-            "direction": "I",
-            "left": "383",
-            "right": "0"
-          },
           "data_out": {
-            "direction": "O"
-          },
-          "done": {
             "direction": "O"
           }
         }
@@ -508,11 +476,11 @@
             "left": "15",
             "right": "0"
           },
-          "lcd_update_req": {
-            "direction": "O"
-          },
           "lcd_update_done": {
             "direction": "I"
+          },
+          "lcd_update_req": {
+            "direction": "O"
           },
           "line1_text": {
             "direction": "O",
@@ -600,8 +568,8 @@
       },
       "i2c_master_0_i2c_scl": {
         "ports": [
-          "i2c_master_0/i2c_scl",
-          "i2c_scl_0"
+          "i2c_scl_0",
+          "i2c_master_0/i2c_scl"
         ]
       },
       "lcd_controller_0_i2c_dev_addr": {
@@ -634,16 +602,10 @@
           "system_controller_0/lcd_update_done"
         ]
       },
-      "lighting_controller_0_led_data": {
+      "lighting_controller_0_data_out": {
         "ports": [
-          "lighting_controller_0/led_data",
-          "ws2812_chain_0/led_data"
-        ]
-      },
-      "lighting_controller_0_ws_start": {
-        "ports": [
-          "lighting_controller_0/ws_start",
-          "ws2812_chain_0/start"
+          "lighting_controller_0/data_out",
+          "data_out_0"
         ]
       },
       "lm75_client_0_i2c_dev_addr": {
@@ -704,12 +666,6 @@
         "ports": [
           "system_controller_0/line2_text",
           "lcd_controller_0/line2_text"
-        ]
-      },
-      "ws2812_chain_0_data_out": {
-        "ports": [
-          "ws2812_chain_0/data_out",
-          "data_out_0"
         ]
       }
     }

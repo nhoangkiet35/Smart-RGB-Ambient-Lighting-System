@@ -1,52 +1,49 @@
 {
    "ActiveEmotionalView":"Default View",
-   "Default View_ScaleFactor":"0.763274",
-   "Default View_TopLeft":"-290,3",
+   "Default View_ScaleFactor":"0.697814",
+   "Default View_TopLeft":"-172,126",
    "ExpandedHierarchyInLayout":"",
    "guistr":"# # String gsaved with Nlview 7.8.0 2024-04-26 e1825d835c VDI=44 GEI=38 GUI=JA:21.0
 #  -string -flagsOSRD
-preplace port port-id_i2c_scl_0 -pg 1 -lvl 5 -x 1410 -y 300 -defaultsOSRD
-preplace port port-id_i2c_sda_0 -pg 1 -lvl 5 -x 1410 -y 270 -defaultsOSRD
-preplace port port-id_data_out_0 -pg 1 -lvl 5 -x 1410 -y 530 -defaultsOSRD
-preplace inst bh1750_client_0 -pg 1 -lvl 1 -x 140 -y 110 -defaultsOSRD
-preplace inst i2c_arbiter_0 -pg 1 -lvl 3 -x 930 -y 300 -defaultsOSRD
-preplace inst lm75_client_0 -pg 1 -lvl 1 -x 140 -y 310 -defaultsOSRD
-preplace inst lcd_controller_0 -pg 1 -lvl 2 -x 510 -y 780 -defaultsOSRD
-preplace inst i2c_master_0 -pg 1 -lvl 4 -x 1250 -y 280 -defaultsOSRD
-preplace inst lighting_controller_0 -pg 1 -lvl 3 -x 930 -y 560 -defaultsOSRD
-preplace inst ws2812_chain_0 -pg 1 -lvl 4 -x 1250 -y 540 -defaultsOSRD
-preplace inst system_controller_0 -pg 1 -lvl 1 -x 140 -y 550 -defaultsOSRD
-preplace netloc Net 1 4 1 NJ 270
-preplace netloc bh1750_client_0_i2c_dev_addr 1 1 2 NJ 130 690
-preplace netloc bh1750_client_0_i2c_req 1 1 2 NJ 90 720
-preplace netloc bh1750_client_0_i2c_rw 1 1 2 NJ 110 710
-preplace netloc bh1750_client_0_i2c_tx_data 1 1 2 NJ 150 680
-preplace netloc bh1750_client_0_lux_value 1 0 2 -50 420 340
-preplace netloc i2c_arbiter_0_dev_addr 1 3 1 N 310
-preplace netloc i2c_arbiter_0_req 1 3 1 N 270
-preplace netloc i2c_arbiter_0_rw 1 3 1 N 290
-preplace netloc i2c_arbiter_0_tx_data 1 3 1 N 330
-preplace netloc i2c_master_0_i2c_scl 1 4 1 1390J 290n
-preplace netloc lcd_controller_0_i2c_dev_addr 1 2 1 710 410n
-preplace netloc lcd_controller_0_i2c_req 1 2 1 690 370n
-preplace netloc lcd_controller_0_i2c_rw 1 2 1 700 390n
-preplace netloc lcd_controller_0_i2c_tx_data 1 2 1 720 430n
-preplace netloc lcd_controller_0_update_done 1 0 3 -40 650 N 650 680
-preplace netloc lighting_controller_0_led_data 1 3 1 N 570
-preplace netloc lighting_controller_0_ws_start 1 3 1 N 550
-preplace netloc lm75_client_0_i2c_dev_addr 1 1 2 N 330 N
-preplace netloc lm75_client_0_i2c_req 1 1 2 N 290 N
-preplace netloc lm75_client_0_i2c_rw 1 1 2 N 310 N
-preplace netloc lm75_client_0_i2c_tx_data 1 1 2 N 350 N
-preplace netloc lm75_client_0_temp_value 1 0 2 -40 430 320
-preplace netloc system_controller_0_base_rgb 1 1 2 N 590 N
-preplace netloc system_controller_0_brightness_level 1 1 2 N 570 N
-preplace netloc system_controller_0_lcd_update_req 1 1 1 340 510n
-preplace netloc system_controller_0_line1_text 1 1 1 330 530n
-preplace netloc system_controller_0_line2_text 1 1 1 320 550n
-preplace netloc ws2812_chain_0_data_out 1 4 1 NJ 530
-levelinfo -pg 1 -540 140 510 930 1250 1410
-pagesize -pg 1 -db -bbox -sgen -540 0 1530 1020
+preplace port port-id_i2c_scl_0 -pg 1 -lvl 4 -x 1050 -y 250 -defaultsOSRD
+preplace port port-id_i2c_sda_0 -pg 1 -lvl 4 -x 1050 -y 220 -defaultsOSRD
+preplace port port-id_data_out_0 -pg 1 -lvl 4 -x 1050 -y 600 -defaultsOSRD
+preplace inst bh1750_client_0 -pg 1 -lvl 1 -x 190 -y 110 -defaultsOSRD
+preplace inst i2c_arbiter_0 -pg 1 -lvl 2 -x 570 -y 300 -defaultsOSRD
+preplace inst lm75_client_0 -pg 1 -lvl 1 -x 190 -y 310 -defaultsOSRD
+preplace inst lcd_controller_0 -pg 1 -lvl 1 -x 190 -y 700 -defaultsOSRD
+preplace inst i2c_master_0 -pg 1 -lvl 3 -x 890 -y 270 -defaultsOSRD
+preplace inst lighting_controller_0 -pg 1 -lvl 3 -x 890 -y 600 -defaultsOSRD
+preplace inst system_controller_0 -pg 1 -lvl 2 -x 570 -y 590 -defaultsOSRD
+preplace netloc Net 1 3 1 NJ 220
+preplace netloc bh1750_client_0_i2c_dev_addr 1 1 1 370 130n
+preplace netloc bh1750_client_0_i2c_req 1 1 1 400 90n
+preplace netloc bh1750_client_0_i2c_rw 1 1 1 390 110n
+preplace netloc bh1750_client_0_i2c_tx_data 1 1 1 360 150n
+preplace netloc bh1750_client_0_lux_value 1 1 1 380 70n
+preplace netloc i2c_arbiter_0_dev_addr 1 2 1 750 290n
+preplace netloc i2c_arbiter_0_req 1 2 1 N 270
+preplace netloc i2c_arbiter_0_rw 1 2 1 740 290n
+preplace netloc i2c_arbiter_0_tx_data 1 2 1 N 330
+preplace netloc i2c_master_0_i2c_scl 1 3 1 1030J 240n
+preplace netloc lcd_controller_0_i2c_dev_addr 1 1 1 390 410n
+preplace netloc lcd_controller_0_i2c_req 1 1 1 360 370n
+preplace netloc lcd_controller_0_i2c_rw 1 1 1 370 390n
+preplace netloc lcd_controller_0_i2c_tx_data 1 1 1 400 430n
+preplace netloc lcd_controller_0_update_done 1 1 1 N 630
+preplace netloc lighting_controller_0_data_out 1 3 1 NJ 600
+preplace netloc lm75_client_0_i2c_dev_addr 1 1 1 N 330
+preplace netloc lm75_client_0_i2c_req 1 1 1 N 290
+preplace netloc lm75_client_0_i2c_rw 1 1 1 N 310
+preplace netloc lm75_client_0_i2c_tx_data 1 1 1 N 350
+preplace netloc lm75_client_0_temp_value 1 1 1 350 270n
+preplace netloc system_controller_0_base_rgb 1 2 1 N 630
+preplace netloc system_controller_0_brightness_level 1 2 1 N 610
+preplace netloc system_controller_0_lcd_update_req 1 0 3 30 820 NJ 820 750
+preplace netloc system_controller_0_line1_text 1 0 3 10 490 NJ 490 740
+preplace netloc system_controller_0_line2_text 1 0 3 20 830 NJ 830 740
+levelinfo -pg 1 -10 190 570 890 1050
+pagesize -pg 1 -db -bbox -sgen -10 0 1170 840
 "
 }
 0
