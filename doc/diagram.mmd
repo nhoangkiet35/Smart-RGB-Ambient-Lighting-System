@@ -1,0 +1,62 @@
+flowchart TB
+    subgraph SENSORS [Sensors]
+        BH1750[bh1750_client]
+        LM75[lm75_client]
+    end
+
+    subgraph I2C_BUS ["I2C Bus (shared)"]
+        I2C_ARB[i2c_arbiter]
+        I2C_MASTER[i2c_master]
+    end
+
+    subgraph SYS [System Controller]
+        SYS_CTRL[system_controller]
+    end
+
+    subgraph LCD [LCD Subsystem]
+        LCD_CTRL[lcd_controller]
+        LBYTE[lcd_byte_sender]
+    end
+
+    subgraph LIGHT [Lighting Subsystem]
+        LIGHT_CTRL[lighting_controller]
+        WS_CHAIN[ws2812_chain]
+    end
+
+    %% connections (bundled)
+    BH1750 -->|"lux[15:0]"| SYS_CTRL
+    LM75  -->|"temp[15:0]"| SYS_CTRL
+
+    BH1750 -->|"I2C_CLIENT0: {req,rw,dev_addr,tx_data,rx_data,done,ack}"| I2C_ARB
+    LM75    -->|"I2C_CLIENT1: {req,rw,dev_addr,tx_data,rx_data,done,ack}"| I2C_ARB
+    LCD_CTRL -->|"I2C_CLIENT2: {req,rw,dev_addr,tx_data,rx_data,done,ack}"| I2C_ARB
+
+    I2C_ARB -->|"ARB_TO_MASTER: {req,rw,dev_addr,tx_data}"| I2C_MASTER
+    I2C_MASTER -->|"i2c_sda,i2c_scl"| I2C_BUS
+
+    SYS_CTRL -->|"LCD_FRAME_BUS: {line1[127:0], line2[127:0], lcd_update_req}"| LCD_CTRL
+    LCD_CTRL -->|"BYTE_IF: {lbyte_start,lbyte_data[7:0],lbyte_rs,lbyte_busy,lbyte_done}"| LBYTE
+
+    SYS_CTRL -->|"LIGHT_CFG: {base_rgb[23:0], brightness[7:0], ws_start}"| LIGHT_CTRL
+    LIGHT_CTRL -->|"LED_DATA[383:0]"| WS_CHAIN
+    WS_CHAIN -->|"data_out, done"| LIGHT_CTRL
+
+
+
+    %% ============================
+    %% COLOR STYLES
+    %% ============================
+    %% style I2C_MASTER fill:#d0e6ff,stroke:#4a90e2,stroke-width:2px
+    %% style I2C_ARB fill:#e8f2ff,stroke:#4a90e2
+    %% style BH1750 fill:#bcd9ff,stroke:#4a90e2
+    %% style LM75 fill:#a8ccff,stroke:#4a90e2
+
+    %% style SYS_CTRL fill:#ffe4c7,stroke:#ff9f1c,stroke-width:2px
+
+    %% style LIGHT_CTRL fill:#d5f5d5,stroke:#63c261,stroke-width:2px
+    %% style LIGHT fill:#c1f1c1,stroke:#63c261
+    %% style I2C_BUS fill:#a8eaa8,stroke:#63c261
+
+    %% style LCD_CTRL fill:#fff,stroke:#4a4a4a,stroke-width:2px
+    %% style WS_CHAIN fill:#fff,stroke:#4a4a4a,stroke-width:2px
+    
