@@ -1,14 +1,14 @@
 `timescale 1ns / 1ps
 
 module i2c_master #(
-  parameter SYS_FREQ = 125_000_000,
-  parameter I2C_FREQ = 100_000
-)(
+    parameter SYS_FREQ = 125_000_000,
+    parameter I2C_FREQ = 100_000
+) (
     input clk,
     rst,
     start,
+    rw,
     input [6:0] dev_addr,
-    input rw,
     inout i2c_sda,
     inout i2c_scl,
     input [7:0] rx_data,
@@ -84,7 +84,7 @@ module i2c_master #(
 
         //////////////IDLE state
         IDLE: begin
-          done <= 1'b0;   // clear done flag
+          done <= 1'b0;  // clear done flag
           if (start == 1'b1) begin
             data_addr  <= {dev_addr,rw};
             data_tx    <= rx_data;
@@ -391,7 +391,7 @@ module i2c_master #(
           if (count1 == CLK_COUNT1 * 4 - 1) begin
             state  <= IDLE;
             scl_t  <= 1'b0;
-            busy   <= 1'b0;   /// clear busy flag
+            busy   <= 1'b0;  /// clear busy flag
             sda_en <= 1'b1;  ///send START to slave
             done   <= 1'b1;
           end else state <= STOP;

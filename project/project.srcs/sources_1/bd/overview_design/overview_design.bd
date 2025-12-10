@@ -310,21 +310,10 @@
             "left": "7",
             "right": "0"
           },
-          "lbyte_start": {
-            "direction": "O"
-          },
-          "lbyte_data": {
-            "direction": "O",
-            "left": "7",
-            "right": "0"
-          },
-          "lbyte_rs": {
-            "direction": "O"
-          },
-          "lbyte_busy": {
+          "i2c_busy": {
             "direction": "I"
           },
-          "lbyte_done": {
+          "i2c_done": {
             "direction": "I"
           }
         }
@@ -359,16 +348,13 @@
           "start": {
             "direction": "I"
           },
-          "req": {
+          "rw": {
             "direction": "I"
           },
           "dev_addr": {
             "direction": "I",
             "left": "6",
             "right": "0"
-          },
-          "rw": {
-            "direction": "I"
           },
           "i2c_sda": {
             "direction": "IO"
@@ -548,10 +534,10 @@
           "i2c_master_0/dev_addr"
         ]
       },
-      "i2c_arbiter_0_req": {
+      "i2c_arbiter_0_req1": {
         "ports": [
           "i2c_arbiter_0/req",
-          "i2c_master_0/req"
+          "i2c_master_0/start"
         ]
       },
       "i2c_arbiter_0_rw": {

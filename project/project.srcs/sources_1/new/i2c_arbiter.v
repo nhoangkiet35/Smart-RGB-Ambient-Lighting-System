@@ -21,7 +21,7 @@ module i2c_arbiter (
     input  wire [7:0] c2_rx_data,
 
     // I2C master side
-    output wire        req,
+    output wire        req,         // start
     output wire        rw,         // 0 = write, 1 = read
     output wire [6:0]  dev_addr,   // 7-bit I2C address
     output wire [7:0]  tx_data     // byte gửi vào i2c_master.rx_data
