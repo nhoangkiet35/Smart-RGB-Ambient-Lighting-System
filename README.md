@@ -1,14 +1,14 @@
-# 🌈 About Smart RGB Ambient Lighting System
+![1765432983995](image/README/1765432983995.png)# **Smart RGB Ambient Lighting System**
 
-## I. Introduction
+## **I. Introduction**
 
-Smart RGB Ambient Lighting System là một hệ thống chiếu sáng thông minh sử dụng **FPGA PYNQ-Z2**, **cảm biến ánh sáng BH1750**, **cảm biến nhiệt độ LM75**, và **LED RGB WS2812** để tạo ra hiệu ứng ánh sáng tự động theo môi trường.
+**Smart RGB Ambient Lighting System** là một hệ thống chiếu sáng thông minh sử dụng **FPGA PYNQ-Z2**, **cảm biến ánh sáng BH1750**, **cảm biến nhiệt độ LM75**, và **LED RGB WS2812** để tạo ra hiệu ứng ánh sáng tự động theo môi trường.
 
 Dự án này kết hợp **thiết kế phần cứng (RTL – Verilog HDL)** và **giao tiếp I²C** để thu thập dữ liệu môi trường theo thời gian thực, sau đó điều khiển dải LED RGB hiển thị màu sắc/độ sáng tương ứng.
 
 Toàn bộ quá trình xử lý – từ đọc sensor, chuyển đổi dữ liệu, xử lý logic hiệu ứng đến xuất tín hiệu điều khiển WS2812 – đều chạy trên FPGA, giúp hệ thống phản hồi cực nhanh, ổn định và hoạt động độc lập không cần vi xử lý truyền thống. Toàn bộ Logic chạy song song nhờ kiến trúc FPGA → độ trễ cực thấp.
 
-## II. Features
+## **II. Features**
 
 1. **Auto-Brightness**: Độ sáng LED thay đổi theo cường độ ánh sáng môi trường (BH1750).
 2. **Thermal Color Effect**: LED tự đổi màu theo nhiệt độ thực tế từ LM75 (cool → warm) phạm vi kiểm tra nhiệt độ từ 25℃ → 35℃.
@@ -23,7 +23,7 @@ Toàn bộ quá trình xử lý – từ đọc sensor, chuyển đổi dữ li�
 4. **Scrolling Warning Text** hiển thị trên LCD1602 (I²C), tự động cảnh báo khi nhiệt độ vượt ngưỡng [25℃, 35℃].
 5. **FPGA-based WS2812 Driver**: Tạo chuẩn giao tiếp WS2812 800 kHz hoàn toàn bằng Verilog.
 
-## III. Specification
+## **III. Specification**
 
 * **Platform**: TUL PYNQ-Z2 – Xilinx Zynq XC7Z020 FPGA
 * **LED Standard**: WS2812B, 800 kHz, 24-bit RGB
@@ -36,7 +36,7 @@ Toàn bộ quá trình xử lý – từ đọc sensor, chuyển đổi dữ li�
 * **Programming Language**: Verilog HDL
 * **Toolchain**: Xilinx Vivado
 
-## IV. Product List
+## **IV. Product List**
 
 | No  | Name                                           | QTY | Picture                                    |
 | --- | ---------------------------------------------- | --- | ------------------------------------------ |
@@ -46,11 +46,11 @@ Toàn bộ quá trình xử lý – từ đọc sensor, chuyển đổi dữ li�
 | 4   | CJMCU-75 LM75 Temperature Sensor -55 → +125 °C | 1   | ![image](./image/module/LM75A.png)         |
 | 5   | MKE-M07 LCD1602 I²C Module                     | 1   | ![image](./image/module/LCD1602_I2C.png)   |
 
-## V. Architecture
+## **V. Architecture**
 
-Hệ thống thiết kế theo hướng **module hóa** và **xử lý song song**, sử dụng mô hình **Sensor → Processing → Effect → Driver → Output**. Mỗi thành phần đảm nhiệm một nhiệm vụ độc lập, sau đó kết nối với nhau thông qua các bus tín hiệu rõ ràng và chuẩn hóa. Kiến trúc tổng quan gồm 4 khối chính:
+Hệ thống thiết kế theo hướng **module hóa** và **xử lý song song**, sử dụng mô hình **Sensor → Processing → Effect → Driver → Output**. Mỗi thành phần đảm nhiệm một nhiệm vụ độc lập, sau đó kết nối với nhau thông qua các bus tín hiệu rõ ràng và chuẩn hóa. Kiến trúc tổng quan gồm 7 khối chính:
 
-![1765279510871](image/README/1765279510871.png)
+![1765432318287](image/README/1765432318287.png)
 
 ### 1. Sensor Interface Layer (I²C Layer)
 
@@ -63,7 +63,7 @@ Cả hai module đều dùng chung **I²C Master** tùy chỉnh, hỗ trợ truy
 
 | _Figure 1: I²C Master Module_                    | _Figure 2: BH1750 Reader Module_                 | _Figure 3: LM75 Reader Module_                   |
 | ------------------------------------------------ | ------------------------------------------------ | ------------------------------------------------ |
-| ![1765279541978](image/README/1765279541978.png) | ![1765279561557](image/README/1765279561557.png) | ![1765279575306](image/README/1765279575306.png) |
+| ![1765433137522](image/README/1765433137522.png) | ![1765279561557](image/README/1765279561557.png) | ![1765279575306](image/README/1765279575306.png) |
 
 ### 2. Data Processing Layer
 
@@ -104,221 +104,240 @@ Module WS2812 quan trọng nhất để giao tiếp LED, sinh ra chuẩn timing 
 | ------------------------------------------------ |
 | ![1765279896476](image/README/1765279896476.png) |
 
-## VI. Block Diagram / Data Flow
+## **VI. Block Diagram / Data Flow**
 
 ### 1. Block Diagram Overview
 
-Hệ thống Smart RGB Ambient Lighting System được chia thành 5 khối chính, kết nối theo pipeline **BH1750 & LM75 → I²C Interface → Processing → RGB Engine → WS2812 Driver → LED Strip**.
+Hệ thống Smart RGB Ambient Lighting System được chia thành 7 khối chính.
 Sơ đồ khối tổng quan mô tả luồng dữ liệu vận hành real-time:
 
 ```mermaid
-flowchart TB
-    subgraph SENSORS [Input Sensors]
-        BH1750@{ shape: lean-r, label: "BH1750" }
-        LM75@{ shape: lean-r, label: "LM75" }
-    end
+flowchart LR
+    BH["BH1750 Client"] --> ARB["I2C Arbiter"]
+    LM["LM75 Client"] --> ARB
+    LCD["LCD Controller"] --> ARB
+    ARB --> MSTR["I2C Master"]
+    BH -- lux_value --> SYS["System Controller"]
+    LM -- temp_value --> SYS
+    SYS -- update text --> LCD
+    SYS -- brightness_level<br>base_rgb --> LED["Lighting Controller"]
+    LED -- pin out --> WS2812(("WS2812"))
+    MSTR -- pin out --> SCL(("SCL")) & SDA(("SDA"))
 
-    subgraph TOP
-        subgraph I2C_IF [Sensor Interface Layer]
-            1["BH1750 Read"]; 2["LM75 Read"];
-            I2C_MASTER(I2C Master)
-        end
-
-        subgraph PROC [Data Processing]
-            4[Brightness Controller]; 5[Temperature Controller];
-        end
-
-        EFFECT["RGB Effect Engine"];
-        subgraph WS2812_SYS [Lighting System]
-            LED_CHAIN[WS2812 Chain];
-            WS2812_DRV["WS2812 Driver"];
-        end
-  
-        1<--Lux Data-->I2C_MASTER;
-        2<--Temp Data-->I2C_MASTER;
-        %% Connections from sensors to I2C interface
-        BH1750 & LM75-.RAW.->I2C_MASTER;
-        1--Clean Lux Data-->PROC;
-        2--Clean Temp Data-->PROC;
-
-        LED_CHAIN-->WS2812_DRV;
-        PROC--Mapped RGB + Brightness-->EFFECT--Serial RGB RAW-->WS2812_SYS;
-    end
-
-    WS2812@{ shape: lean-l, label: "WS2812 64 LED" };
-    WS2812_SYS-.->WS2812;
-
-    %% ===== STYLES =====
-    style SENSORS fill:#01b86a,stroke:#333,stroke-width:2px
-    style I2C_IF fill:#6452dd,stroke:#333,stroke-width:2px
-    style PROC fill:#ff7046,stroke:#333,stroke-width:2px
-    style WS2812_SYS fill:#FFF,stroke:#333,stroke-width:2px
-    style WS2812 fill:#f00,stroke:#333,stroke-width:2px
+    style BH fill:#BBDEFB
+    style LM fill:#BBDEFB
+    style LCD fill:#C8E6C9
+    style MSTR fill:#FFCDD2
+    style SYS fill:#FFE0B2
+    style LED fill:#FFF9C4
+    style WS2812 fill:transparent
+    style SCL fill:transparent
+    style SDA fill:transparent
 ```
 
 ### 2. LM75 I²C Read Temperature Flow
 
 ```mermaid
 flowchart LR
-    START([START]) --> WRITE_PHASE
+ subgraph WPH["Write Phase"]
+    direction TB
+        ACK1{"ACK?"}
+        AW["Send Address 0x48 (Write)"]
+        REG["Send Pointer Register = 0x00"]
+        ERR1[["Error"]]
+        ACK2{"ACK?"}
+        DONE_W(["Write Complete"])
+  end
+ subgraph RPH["Read Phase"]
+    direction TB
+        ACK3{"ACK?"}
+        AR["Send Address 0x48 (Read)"]
+        MSB["Read MSB Byte"]
+        ERR2[["Error"]]
+        ACK_MSB(["Master sends ACK"])
+        LSB["Read LSB Byte"]
+        NACK_LSB(["Master sends NACK"])
+  end
+    START(["START"]) --> AW
+    AW --> ACK1
+    ACK1 -- Yes --> REG
+    ACK1 -- No --> ERR1
+    REG --> ACK2
+    ACK2 -- Yes --> DONE_W
+    ACK2 -- No --> ERR1
+    DONE_W --> RS(["Repeated START"])
+    AR --> ACK3
+    ACK3 -- Yes --> MSB
+    ACK3 -- No --> ERR2
+    MSB --> ACK_MSB
+    ACK_MSB --> LSB
+    LSB --> NACK_LSB
+    RS --> RPH
+    RPH --> STOP(["STOP Condition"])
+    STOP --> DONE(["Temperature Value Ready"])
 
-    %% --- WRITE PHASE ---
-    subgraph WRITE_PHASE [Write Phase]
-        direction TB
-        AW["Send 0x48 (Write)"] --> ACK1{ACK?}
-        ACK1 -->|Yes| REG["Send Register = 0x00"]
-        ACK1 -->|No| ERR1[[Error]]
+    style WPH fill:#FFF9C4
+    style RPH fill:#FFF9C4flowchart LR
+ subgraph WPH["Write Phase"]
+    direction TB
+        ACK1{"ACK?"}
+        AW["Send Address 0x48 (Write)"]
+        REG["Send Pointer Register = 0x00"]
+        ERR1[["Error"]]
+        ACK2{"ACK?"}
+        DONE_W(["Write Complete"])
+  end
+ subgraph RPH["Read Phase"]
+    direction TB
+        ACK3{"ACK?"}
+        AR["Send Address 0x48 (Read)"]
+        MSB["Read MSB Byte"]
+        ERR2[["Error"]]
+        ACK_MSB(["Master sends ACK"])
+        LSB["Read LSB Byte"]
+        NACK_LSB(["Master sends NACK"])
+  end
+    START(["START"]) --> AW
+    AW --> ACK1
+    ACK1 -- Yes --> REG
+    ACK1 -- No --> ERR1
+    REG --> ACK2
+    ACK2 -- Yes --> DONE_W
+    ACK2 -- No --> ERR1
+    DONE_W --> RS(["Repeated START"])
+    AR --> ACK3
+    ACK3 -- Yes --> MSB
+    ACK3 -- No --> ERR2
+    MSB --> ACK_MSB
+    ACK_MSB --> LSB
+    LSB --> NACK_LSB
+    RS --> RPH
+    RPH --> STOP(["STOP Condition"])
+    STOP --> DONE(["Temperature Value Ready"])
 
-        REG --> ACK2{ACK?}
-        ACK2 -->|Yes| DONE_W([Write OK])
-        ACK2 -->|No| ERR1[[Error]]
-    end
-
-    DONE_W --> RS([Repeated START])
-
-    %% --- READ PHASE ---
-    subgraph READ_PHASE [Read Phase]
-        direction TB
-        AR["Send 0x48 (Read)"] --> ACK3{ACK?}
-        ACK3 -->|Yes| MSB["Read MSB Byte"]
-        ACK3 -->|No| ERR2[[Error]]
-
-        MSB --> ACK_MSB([Send ACK])
-        ACK_MSB --> LSB["Read LSB Byte"]
-
-        LSB --> NACK_LSB([Send NACK])
-    end
-
-    RS --> READ_PHASE --> STOP([STOP])
-    STOP --> DONE([Temp Ready])
-
-```
-
-#### LM75 I²C Write Temperature on LCD I²C
-
-```mermaid
-sequenceDiagram
-    autonumber
-
-    participant FPGA as PYNQ-Z2 FPGA
-    participant LM75 as LM75 Sensor
-    participant LCD as LCD I²C (PCF8574)
-
-    Note over FPGA: RESET → LCD Init
-
-    FPGA->>LCD: Function Set
-    FPGA->>LCD: Display ON
-    FPGA->>LCD: Clear Display
-    LCD-->>FPGA: ACK
-
-    Note over FPGA: Init Done → Start Reading LM75
-
-    FPGA->>LM75: START + Addr(0x48) + Write
-    LM75-->>FPGA: ACK
-
-    FPGA->>LM75: Pointer Register = 0x00
-    LM75-->>FPGA: ACK
-
-    FPGA->>LM75: RESTART + Addr(0x48) + Read
-    LM75-->>FPGA: ACK
-
-    LM75-->>FPGA: Byte1 (MSB) & Byte2 (LSB)
-    FPGA->>LM75: NACK + STOP
-
-    Note over FPGA: Convert Temp → ASCII
-
-    FPGA->>LCD: I²C Write "Temp:"
-    LCD-->>FPGA: ACK
-
-    FPGA->>LCD: I²C Write digits (XX.X)
-    LCD-->>FPGA: ACK
-
-    Note over FPGA: Wait → repeat periodically
+    style WPH fill:#FFF9C4
+    style RPH fill:#FFF9C4
 ```
 
 ### 3. BH1750 I²C Read Lux Flow
 
 ```mermaid
 flowchart LR
-
-    START([START]) --> WRITE_FLOW
-
-    %% --- WRITE PHASE ---
-    subgraph WRITE_FLOW [Write Phase]
-        direction TB
-        AW["Send 0x23 (Write)"] --> ACK1{ACK?}
-        ACK1 -->|Yes| CMD["Send Mode Cmd (0x10)"]
-        ACK1 -->|No| ERR1[[Error]]
-
-        CMD --> ACK2{ACK?}
-        ACK2 -->|Yes| DONE_W([Write OK])
-        ACK2 -->|No| ERR1[[Error]]
-    end
-
+ subgraph WRITE_FLOW["Write Phase"]
+    direction TB
+        ACK1{"ACK?"}
+        AW["Send 0x23 (Write)"]
+        CMD["Send Mode Cmd (0x10)"]
+        ERR1[["Error"]]
+        ACK2{"ACK?"}
+        DONE_W(["Write OK"])
+  end
+ subgraph READ_FLOW["Read Phase"]
+    direction TB
+        ACK3{"ACK?"}
+        AR["Send 0x23 (Read)"]
+        HB["Read High Byte"]
+        ERR3[["Error"]]
+        ACK_H(["Send ACK"])
+        LB["Read Low Byte"]
+        NACK_L(["Send NACK"])
+  end
+    START(["START"]) --> AW
+    AW --> ACK1
+    ACK1 -- Yes --> CMD
+    ACK1 -- No --> ERR1
+    CMD --> ACK2
+    ACK2 -- Yes --> DONE_W
+    ACK2 -- No --> ERR1
     DONE_W --> WAIT(["Wait ~120ms (Measuring)"])
-    WAIT --> RS([Repeated START])
+    WAIT --> RS(["Repeated START"])
+    AR --> ACK3
+    ACK3 -- Yes --> HB
+    ACK3 -- No --> ERR3
+    HB --> ACK_H
+    ACK_H --> LB
+    LB --> NACK_L
+    RS --> READ_FLOW
+    READ_FLOW --> STOP(["STOP"])
+    STOP --> CALC(["Convert → Lux"])
 
-    %% --- READ PHASE ---
-    subgraph READ_FLOW [Read Phase]
-        direction TB
-        AR["Send 0x23 (Read)"] --> ACK3{ACK?}
-        ACK3 -->|Yes| HB["Read High Byte"]
-        ACK3 -->|No| ERR3[[Error]]
-
-        HB --> ACK_H([Send ACK])
-        ACK_H --> LB["Read Low Byte"]
-
-        LB --> NACK_L([Send NACK])
-    end
-
-    RS --> READ_FLOW --> STOP([STOP])
-    STOP --> CALC([Convert → Lux])
-
+    style WRITE_FLOW fill:#FFF9C4
+    style READ_FLOW fill:#FFF9C4
 ```
 
-### 4. I²C Bus Topology (1 SDA + 1 SCL)
+### 4. LCD1602 I²C Write Flow
+
+```mermaid
+flowchart LR
+    ST([I²C START]) --> SEND_ADDR["Send PCF8574 Addr 0x27 (Write)"]
+    SEND_ADDR --> ACKA{ACK?}
+    ACKA -->|No| ERR[[Error: No ACK]]
+    ACKA -->|Yes| HI_E1
+
+    %% -------- HIGH NIBBLE --------
+    subgraph HI_PATH [High Nibble Phase]
+        direction TB
+        HI_E1["Send High Nibble<br/>RS + E=1"] --> ACK1{ACK?}
+        ACK1 -->|No| ERR
+        ACK1 -->|Yes| HI_E0["Send High Nibble<br/>RS + E=0"]
+        HI_E0 --> ACK2{ACK?}
+        ACK2 -->|No| ERR
+    end
+
+    ACK2 -->|Yes| LO_E1
+
+    %% -------- LOW NIBBLE --------
+    subgraph LO_PATH [Low Nibble Phase]
+        direction TB
+        LO_E1["Send Low Nibble<br/>RS + E=1"] --> ACK3{ACK?}
+        ACK3 -->|No| ERR
+        ACK3 -->|Yes| LO_E0["Send Low Nibble<br/>RS + E=0"]
+        LO_E0 --> ACK4{ACK?}
+        ACK4 -->|No| ERR
+    end
+
+    ACK4 -->|Yes| STOP([I²C STOP])
+    STOP --> DONE([LCD Byte Write Done])
+```
+
+### 5. I²C Bus Topology (1 SDA + 1 SCL)
 
 ```mermaid
 flowchart TB
-    subgraph PYNQ_Z2 [PYNQ-Z2 Board]
-        direction TB
-        SDA_P[SDA Pin]
-        SCL_P[SCL Pin]
-    end
+ subgraph PYNQ_Z2["PYNQ-Z2 Board"]
+    direction TB
+        SDA_P["SDA Pin"]
+        SCL_P["SCL Pin"]
+  end
+ subgraph LM75["LM75 Temperature Sensor"]
+        SDA1["SDA"]
+        SCL1["SCL"]
+        ADDR1["Addr = 0x48"]
+  end
+ subgraph BH1750["BH1750 Light Sensor"]
+        SDA2["SDA"]
+        SCL2["SCL"]
+        ADDR2["Addr = 0x23"]
+  end
+ subgraph LCD["I²C LCD Module"]
+        SDA3["SDA"]
+        SCL3["SCL"]
+        ADDR3["Addr = 0x27 / 0x3F"]
+  end
+    SDA_P == SDA ==> SDA_BUS(("SDA Bus"))
+    SCL_P == SCL ==> SCL_BUS(("SCL Bus"))
+    SDA_BUS --- SDA1 & SDA2 & SDA3
+    SCL_BUS --- SCL1 & SCL2 & SCL3
 
-    SDA_P == SDA ==> SDA_BUS((SDA Bus))
-    SCL_P == SCL ==> SCL_BUS((SCL Bus))
-
-    %% --- SLAVES ---
-    subgraph LM75 [LM75 Temperature Sensor]
-        SDA1[SDA]
-        SCL1[SCL]
-        ADDR1[Addr = 0x48]
-    end
-
-    subgraph BH1750 [BH1750 Light Sensor]
-        SDA2[SDA]
-        SCL2[SCL]
-        ADDR2[Addr = 0x23]
-    end
-
-    subgraph LCD [I²C LCD Module]
-        SDA3[SDA]
-        SCL3[SCL]
-        ADDR3[Addr = 0x27 / 0x3F]
-    end
-
-    %% --- BUS CONNECTIONS ---
-    SDA_BUS --- SDA1
-    SDA_BUS --- SDA2
-    SDA_BUS --- SDA3
-
-    SCL_BUS --- SCL1
-    SCL_BUS --- SCL2
-    SCL_BUS --- SCL3
+    style SDA_BUS fill:#FFFFFF
+    style SCL_BUS fill:#FFFFFF
+    style LCD fill:#00C853
+    style BH1750 fill:#2962FF
+    style LM75 fill:#AA00FF
+    style PYNQ_Z2 fill:#D50000
 ```
 
-#### 📝 Giải thích chi tiết
+**Giải thích chi tiết:**
 
 * **Chỉ 1 SDA + 1 SCL** từ PYNQ-Z2
 * Tạo thành **I²C shared bus**
@@ -330,7 +349,7 @@ flowchart TB
 * Pull-up 4.7kΩ có thể đã nằm sẵn trong module LCD (hầu hết LCD I²C đều có)
 * Các module nên chạy ở **cùng speed** (100kHz Standard mode là safe)
 
-## VII. Use-Case
+## **VII. Use-Case**
 
 Smart RGB Ambient Lighting System hướng đến những tình huống thực tế cần  **ánh sáng thông minh** ,  **phản hồi theo môi trường** , và  **tăng trải nghiệm người dùng** . Dưới đây là các use-case chính:
 
@@ -392,7 +411,7 @@ Smart RGB Ambient Lighting System hướng đến những tình huống thực t
 * Dễ quan sát trạng thái.
 * UI trực quan, không cần app.
 
-## VIII. Result & Evaluation
+## **VIII. Result & Evaluation**
 
 Sau khi hoàn thiện và kiểm thử từng module, hệ thống Smart RGB Ambient Lighting System hoạt động ổn định và đạt được các kết quả sau:
 
@@ -403,10 +422,10 @@ Sau khi hoàn thiện và kiểm thử từng module, hệ thống Smart RGB Amb
 * [ ] **Xử lý dữ liệu real-time, độ trễ thấp**
   * [ ] Pipeline Sensor → Processing → Effect → LED phản hồi tức thời
   * [ ] Thay đổi ánh sáng/nhiệt độ được LED cập nhật ngay lập tức
-* [ ] **Hiệu ứng RGB hoạt động mượt**
-  * [ ] Các mode Rainbow, Ambient, Wave, Static Color hoạt động đúng logic thiết kế
-  * [ ] Không xuất hiện nhấp nháy (flicker), giật khung hoặc hiện tượng trễ frame
-  * [ ] Màu sắc đồng đều và đúng với giá trị RGB được tính toán
+* [X] **Hiệu ứng RGB hoạt động mượt**
+  * [X] Các mode Rainbow, Ambient, Wave, Static Color hoạt động đúng logic thiết kế
+  * [X] Không xuất hiện nhấp nháy (flicker), giật khung hoặc hiện tượng trễ frame
+  * [X] Màu sắc đồng đều và đúng với giá trị RGB được tính toán
 * [X] **WS2812 Driver đạt chuẩn timing**
   * [X] Tín hiệu 800 kHz ổn định, biên độ và duty an toàn từ datasheet WS2812B
   * [X] LED nhận đủ 24-bit per pixel, hiển thị chính xác toàn bộ 64 LED
@@ -421,11 +440,11 @@ Sau khi hoàn thiện và kiểm thử từng module, hệ thống Smart RGB Amb
   * [ ] Brightness cho ra độ sáng LED rất tự nhiên
   * [ ] Color Effect phản ánh đúng trạng thái môi trường
 
-## IX. Conclusion
+## **IX. Conclusion**
 
 Smart RGB Ambient Lighting System đã chứng minh được khả năng kết hợp hiệu quả giữa cảm biến môi trường, xử lý tín hiệu, và hiển thị ánh sáng thông minh trên nền tảng FPGA. Thông qua kiến trúc module hóa rõ ràng và pipeline xử lý song song, hệ thống hoạt động ổn định, phản hồi nhanh và hiển thị hiệu ứng sống động theo thời gian thực.
 
-## X. References
+## **X. References**
 
 > Các tài liệu tham khảo được chọn lọc từ datasheet chính thức, tài nguyên học thuật, và nguồn kỹ thuật uy tín.
 
